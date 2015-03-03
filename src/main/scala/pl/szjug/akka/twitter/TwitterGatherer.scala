@@ -11,7 +11,7 @@ class TwitterGatherer {
   val AccessToken = "19394025-tKz2ZTGoYxIOxq3pnvojMvuG5pVZ0bOs4IcQvaVWE"
   val AccessSecret = "hloWbSi4tkJEn783GFIf9Qnf6v3QJYAgijN5q2G9rFCZX"
 
-  def getManyTweets(count: Long, queryString: String, lang: String, writer: TweetsWriter) = {
+  def getManyTweets(count: Long, queryString: String, oldestId: Long, lang: String, writer: TweetsWriter): Long = {
     val cb = new ConfigurationBuilder()
     cb.setDebugEnabled(true)
       .setOAuthConsumerKey(ConsumerKey)
@@ -24,28 +24,38 @@ class TwitterGatherer {
     query.setLang(lang)
     query.setCount(100)
 
-    def getBatch(count: Long, minId: Long, writer: TweetsWriter): Unit = {
+    def getBatch(count: Long, oldestId: Long, writer: TweetsWriter): Long = {
       count match {
         case c if c > 0 => {
-          query.setMaxId(minId)
+          query.setMaxId(oldestId)
 
-          val result = twitter.search(query)
-          val sResult = result.getTweets.toList
+          try {
+            println(s"Querying for tweets. Oldest id is $oldestId")
+            val result = twitter.search(query)
+            val sResult = result.getTweets.toList.sortBy(- _.getId)
 
-          writer.write(sResult)
+            if (sResult.size > 0) {
+              writer.write(sResult)
 
-          val newMinId = sResult.foldLeft(Long.MaxValue)((min, tweet) => tweet.getId match {
-            case id if id < min => id
-            case _ => min
-          })
-          getBatch(count - 100, newMinId - 1, writer)
+              val newOldestId = sResult.last.getId
+
+              getBatch(count - 100, newOldestId - 1, writer)
+            } else {
+              println("Request returned no tweets")
+              oldestId
+            }
+          } catch {
+            case e: Exception =>
+              e.printStackTrace()
+              oldestId
+          }
         }
-        case _ =>
+        case _ => oldestId
       }
     }
 
     try {
-      getBatch(count, Long.MaxValue, writer)
+      getBatch(count, oldestId, writer)
     } finally {
       writer.close
     }
