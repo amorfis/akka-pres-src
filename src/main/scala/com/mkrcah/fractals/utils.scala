@@ -40,6 +40,10 @@ case class Region2c(tl: Complex, br: Complex) {
 case class Region2i(tl: Point2i, br: Point2i) {
     val width = br.x - tl.x
     val height = br.y - tl.y
+
+  if (br.x <= tl.x || br.y <= tl.y) {
+    throw new RuntimeException(s"Trying to create Invalid Region2i: $tl, $br")
+  }
 }
 
 

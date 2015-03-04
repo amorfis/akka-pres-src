@@ -3,6 +3,8 @@ package com.mkrcah
 import java.io.File
 import javax.imageio.ImageIO
 
+import com.mkrcah.fractals._
+
 object RenderJulia {
 
 

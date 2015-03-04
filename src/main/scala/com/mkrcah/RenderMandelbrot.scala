@@ -3,6 +3,8 @@ package com.mkrcah
 import java.io.{File, PrintWriter}
 import javax.imageio.ImageIO
 
+import com.mkrcah.fractals._
+
 object RenderMandelbrot {
 
 
