@@ -6,8 +6,9 @@ import com.typesafe.scalalogging.LazyLogging
 class JuliaRenderer(imageSize: Size2i = Size2i(1000, 1000), palette: Palette, quality: Int = 300, partToRender: Region2i) extends LazyLogging {
 
   val region = Region2c(Complex(-2, 1.2), Complex(2, -1.2))
+  assertWholeRegionInPicture(imageSize, partToRender)
 
-  private def wholeRegionInPicture(picture: Size2i, region: Region2i): Unit = {
+  private def assertWholeRegionInPicture(picture: Size2i, region: Region2i): Unit = {
     if (region.tl.x < 0
       || region.tl.y < 0
       || region.br.x > imageSize.width - 1
@@ -25,16 +26,12 @@ class JuliaRenderer(imageSize: Size2i = Size2i(1000, 1000), palette: Palette, qu
     for (
       y <- partToRender.tl.y to partToRender.br.y;
       x <- partToRender.tl.x to partToRender.br.x)
-    yield {
-      logger.debug(s"Getting pixel $x, $y")
-      Point2i(x, y)
-    }
+    yield Point2i(x, y)
   }
 
-  def render(): Iterable[(Point2i, Color)] = {
+  def render(): Result = {
     val j = new Julia(Complex(-0.835, -0.2321), quality)
-    for(pixel <- getPixels) yield {
-      logger.debug(s"Rendering pixel $pixel")
+    val pixels = for(pixel <- getPixels) yield {
       val escapeTime = j.getEscapeTimeFor(imgPointToComplex(pixel))
       val colorIdx =
         if (escapeTime < quality)
@@ -42,5 +39,8 @@ class JuliaRenderer(imageSize: Size2i = Size2i(1000, 1000), palette: Palette, qu
         else 0
       (pixel, palette.get(colorIdx))
     }
+
+    Result(pixels, imageSize, partToRender, quality)
   }
+
 }

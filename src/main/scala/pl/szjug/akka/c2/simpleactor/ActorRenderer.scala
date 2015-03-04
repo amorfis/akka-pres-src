@@ -7,7 +7,11 @@ import pl.szjug.akka.wife.Protocol.RequestPermission
 class ActorRenderer extends Actor with ActorLogging {
 
   override def receive = {
-    case r: JuliaRenderer => r.render()
+    case r: JuliaRenderer => {
+      // Actor is blocked here
+      val pixels = r.render()
+      sender ! pixels
+    }
   }
 }
 

@@ -4,25 +4,23 @@ import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
+import akka.actor.{ActorSystem, Props}
 import com.mkrcah.fractals._
 import com.typesafe.scalalogging.LazyLogging
+import pl.szjug.akka.c1.onethreaded.Main._
 import pl.szjug.akka.fractals.JuliaRenderer
 
 object Main extends App with LazyLogging {
 
-   private val imageSize = Size2i(1000, 700)
-   private val quality = 300
+  val system = ActorSystem("actorSystem")
+  val master = system.actorOf(Props[ActorMaster])
 
-   logger.info("Starting!")
+  private val imageSize = Size2i(1000, 700)
+  private val quality = 300
 
-   val renderer = new JuliaRenderer(imageSize, HuePalette, quality, new Region2i(imageSize))
-   val colorsForPixels = renderer.render()
+  logger.info("Starting!")
 
-   val img = new BufferedImage(imageSize.width, imageSize.height, BufferedImage.TYPE_INT_RGB)
-   for((pixel, color) <- colorsForPixels) {
-     img.setRGB(pixel.x, pixel.y, color.toRGB.toInt)
-   }
+  val renderer = new JuliaRenderer(imageSize, HuePalette, quality, new Region2i(imageSize))
 
-   logger.info("Writing to file")
-   ImageIO.write(img, "png", new File(s"julia$quality$imageSize.png"))
- }
+  master ! renderer
+}

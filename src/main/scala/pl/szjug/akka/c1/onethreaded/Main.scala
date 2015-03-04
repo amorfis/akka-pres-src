@@ -19,7 +19,7 @@ object Main extends App with LazyLogging {
   val colorsForPixels = renderer.render()
 
   val img = new BufferedImage(imageSize.width, imageSize.height, BufferedImage.TYPE_INT_RGB)
-  for((pixel, color) <- colorsForPixels) {
+  for((pixel, color) <- colorsForPixels.pixels) {
     img.setRGB(pixel.x, pixel.y, color.toRGB.toInt)
   }
 
