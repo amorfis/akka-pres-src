@@ -44,6 +44,8 @@ case class Region2i(tl: Point2i, br: Point2i) {
   if (br.x <= tl.x || br.y <= tl.y) {
     throw new RuntimeException(s"Trying to create Invalid Region2i: $tl, $br")
   }
+
+  def this(size: Size2i) = this(Point2i(0, 0), Point2i(size.width - 1, size.height - 1))
 }
 
 
