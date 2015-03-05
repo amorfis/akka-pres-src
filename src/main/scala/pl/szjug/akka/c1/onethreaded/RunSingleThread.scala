@@ -6,21 +6,21 @@ import com.mkrcah.fractals._
 import com.typesafe.scalalogging.LazyLogging
 import pl.szjug.fractals.JuliaRenderer
 import pl.szjug.swing.ImgFrame
+import pl.szjug.akka.Constants._
 
 object RunSingleThread extends App with LazyLogging {
 
-  private val imgSize = Size2i(2000, 1500)
-  private val quality = 300
-
   logger.info("Starting!")
+  
+  val img = new BufferedImage(imageSize.width, imageSize.height, BufferedImage.TYPE_INT_RGB)
+  val f = ImgFrame(img)
 
-  val renderer = new JuliaRenderer(imgSize, HuePalette, quality, new Region2i(imgSize))
+  val renderer = new JuliaRenderer(imageSize, HuePalette, quality, new Region2i(imageSize))
   val colorsForPixels = renderer.render()
 
-  val img = new BufferedImage(imgSize.width, imgSize.height, BufferedImage.TYPE_INT_RGB)
   for((pixel, color) <- colorsForPixels.pixels) {
     img.setRGB(pixel.x, pixel.y, color.toRGB.toInt)
   }
 
-  val f = ImgFrame(img)
+  f.repaint()
 }

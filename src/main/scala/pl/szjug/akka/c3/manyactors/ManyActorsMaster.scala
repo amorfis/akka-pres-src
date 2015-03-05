@@ -2,15 +2,15 @@ package pl.szjug.akka.c3.manyactors
 
 import akka.actor.Props
 import com.mkrcah.fractals.{Point2i, Region2i, Size2i}
-import pl.szjug.akka.actors.{MasterActor, ActorRenderer}
+import pl.szjug.akka.actors.{ActorRenderer, MasterActor}
 import pl.szjug.fractals.Job
 
-class ManyActorsMaster(imgSize: Size2i) extends MasterActor(imgSize) {
+class ManyActorsMaster(imgSize: Size2i, rendererActorType: Class[_ <: ActorRenderer]) extends MasterActor(imgSize) {
 
   val Rows = 2
   val Columns = 4
 
-  val workers = for(i <- 1 to Rows * Columns) yield context.actorOf(Props[ActorRenderer])
+  val workers = for(i <- 1 to Rows * Columns) yield context.actorOf(Props(rendererActorType))
 
   override def receive = handleJob orElse paintResultPixels
 

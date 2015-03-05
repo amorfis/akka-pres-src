@@ -1,11 +1,10 @@
 package pl.szjug.akka.actors
 
-import akka.actor.{Actor, ActorLogging}
 import pl.szjug.fractals.{Job, JuliaRenderer}
 
 import scala.util.Random
 
-class BrokenActorRenderer extends Actor with ActorLogging {
+class BrokenActorRenderer extends ActorRenderer {
 
    override def receive = {
      case j: Job =>

@@ -5,16 +5,13 @@ import akka.actor.{ActorSystem, Props}
 import com.mkrcah.fractals._
 import com.typesafe.scalalogging.LazyLogging
 import pl.szjug.fractals.Job
+import pl.szjug.akka.Constants._
 
 object RunActors extends App with LazyLogging {
 
   val system = ActorSystem("actorSystem")
 
-  private val imageSize = Size2i(2000, 1500)
-  private val quality = 300
-
   val master = system.actorOf(Props(new SimpleActorMaster(imageSize)))
-
 
   logger.info("Starting!")
 
