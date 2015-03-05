@@ -1,4 +1,4 @@
-package pl.szjug.akka.fractals
+package pl.szjug.fractals
 
 import com.mkrcah.fractals._
 import com.typesafe.scalalogging.LazyLogging

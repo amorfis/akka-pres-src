@@ -1,4 +1,4 @@
-package pl.szjug.akka.fractals
+package pl.szjug.fractals
 
 import com.mkrcah.fractals.{Region2i, Size2i, Point2i, Color}
 

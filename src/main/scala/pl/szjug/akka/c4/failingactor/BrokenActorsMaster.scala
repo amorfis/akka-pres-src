@@ -1,16 +1,16 @@
-package pl.szjug.akka.c3.manyactors
+package pl.szjug.akka.c4.failingactor
 
 import akka.actor.Props
 import com.mkrcah.fractals.{Point2i, Region2i, Size2i}
-import pl.szjug.akka.actors.{MasterActor, ActorRenderer}
+import pl.szjug.akka.actors.{BrokenActorRenderer, MasterActor}
 import pl.szjug.fractals.Job
 
-class ManyActorsMaster(imgSize: Size2i) extends MasterActor(imgSize) {
+class BrokenActorsMaster(imgSize: Size2i) extends MasterActor(imgSize) {
 
   val Rows = 2
   val Columns = 4
 
-  val workers = for(i <- 1 to Rows * Columns) yield context.actorOf(Props[ActorRenderer])
+  val workers = for(i <- 1 to Rows * Columns) yield context.actorOf(Props[BrokenActorRenderer])
 
   override def receive = handleJob orElse paintResultPixels
 

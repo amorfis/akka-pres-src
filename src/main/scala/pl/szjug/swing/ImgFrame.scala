@@ -1,4 +1,4 @@
-package pl.szjug.akka.swing
+package pl.szjug.swing
 
 import java.awt.image.BufferedImage
 import java.awt.{Color, Graphics}
@@ -11,7 +11,7 @@ case class ImgFrame(img: BufferedImage) {
 
   f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
   f.getContentPane.add(panel)
-  f.setSize(600, 400)
+  f.setSize(1200, 800)
   f.setVisible(true)
 
   def repaint(): Unit = {

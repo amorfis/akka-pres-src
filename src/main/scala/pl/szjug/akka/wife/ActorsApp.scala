@@ -1,10 +1,8 @@
-package pl.szjug.akka
+package pl.szjug.akka.wife
 
-import akka.actor.{Props, ActorSystem}
-import akka.routing.RoundRobinGroup
-import com.typesafe.config.{ConfigFactory, Config}
+import akka.actor.{ActorSystem, Props}
+import com.typesafe.config.ConfigFactory
 import pl.szjug.akka.wife.Protocol.RequestPermission
-import pl.szjug.akka.wife.Wife
 
 object ActorsApp extends App {
 

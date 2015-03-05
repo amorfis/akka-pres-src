@@ -1,6 +1,7 @@
-package pl.szjug.akka.fractals
+package pl.szjug.akka.actors
 
 import akka.actor.{Actor, ActorLogging}
+import pl.szjug.fractals.{Job, JuliaRenderer}
 
 class ActorRenderer extends Actor with ActorLogging {
 
