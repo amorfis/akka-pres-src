@@ -1,6 +1,6 @@
 package com.mkrcah.fractals
 
-abstract class Palette {
+abstract class Palette extends Serializable {
 
     def get(index:Int): ColorRGB = {
         require(index >= 0 && index <= maxIndex, "s\"Index=$index out of range 0..$maxIndex\"")
