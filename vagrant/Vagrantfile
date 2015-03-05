@@ -26,7 +26,7 @@ SCRIPT
 
   config.vm.network "private_network", ip: "192.168.50.4"
 
-  config.vm.synced_folder "..", "/akka-pres"
+  config.vm.synced_folder "..", "/home/vagrant/akka-pres"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
