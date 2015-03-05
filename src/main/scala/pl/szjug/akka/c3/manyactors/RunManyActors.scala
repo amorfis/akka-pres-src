@@ -11,7 +11,7 @@ object RunManyActors extends App with LazyLogging {
 
   val system = ActorSystem("actorSystem")
 
-  val master = system.actorOf(Props(new ManyActorsMaster(imageSize, classOf[ActorRenderer])))
+  val master = system.actorOf(Props(new ManyActorsMaster(imageSize, classOf[ActorRenderer])), "master")
 
   logger.info("Starting!")
 
