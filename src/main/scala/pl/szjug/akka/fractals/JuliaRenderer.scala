@@ -5,6 +5,8 @@ import com.typesafe.scalalogging.LazyLogging
 
 class JuliaRenderer(imageSize: Size2i = Size2i(1000, 1000), palette: Palette, quality: Int = 300, partToRender: Region2i) extends LazyLogging {
 
+  def this(job: Job, regionToRender: Region2i) = this(job.imgSize, job.palette, job.quality, regionToRender)
+
   val region = Region2c(Complex(-2, 1.2), Complex(2, -1.2))
   assertWholeRegionInPicture(imageSize, partToRender)
 
@@ -42,5 +44,4 @@ class JuliaRenderer(imageSize: Size2i = Size2i(1000, 1000), palette: Palette, qu
 
     Result(pixels, imageSize, partToRender, quality)
   }
-
 }

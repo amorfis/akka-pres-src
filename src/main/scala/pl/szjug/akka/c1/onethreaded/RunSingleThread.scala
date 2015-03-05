@@ -8,7 +8,7 @@ import com.mkrcah.fractals._
 import com.typesafe.scalalogging.LazyLogging
 import pl.szjug.akka.fractals.JuliaRenderer
 
-object Main extends App with LazyLogging {
+object RunSingleThread extends App with LazyLogging {
 
   private val imageSize = Size2i(1000, 700)
   private val quality = 300
