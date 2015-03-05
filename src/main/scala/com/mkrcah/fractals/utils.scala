@@ -48,5 +48,10 @@ case class Region2i(tl: Point2i, br: Point2i) {
   def this(size: Size2i) = this(Point2i(0, 0), Point2i(size.width - 1, size.height - 1))
 }
 
+object Region2i {
+
+  def apply(size:Size2i) = new Region2i(size)
+}
+
 
 
