@@ -21,8 +21,8 @@ case class ImgFrame(img: BufferedImage) {
   def repaintImagePart(x: Int, y: Int, width: Int, height: Int): Unit = {
     val px = x * panel.getWidth / img.getWidth
     val py = y * panel.getHeight / img.getHeight
-    val pWidth = width * panel.getWidth / img.getWidth + 1
-    val pHeight = height * panel.getHeight / img.getHeight + 1
+    val pWidth = width * panel.getWidth / img.getWidth + 5
+    val pHeight = height * panel.getHeight / img.getHeight + 5
 
     panel.repaint(px, py, pWidth, pHeight)
   }
