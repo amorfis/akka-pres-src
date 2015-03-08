@@ -14,7 +14,7 @@ abstract class MasterActor(imgSize: Size2i) extends Actor with ActorLogging {
 
   val paintResultPixels: Receive = {
     case result: Result =>
-      log.info("Result received!")
+      log.info(s"Result received from $sender!")
       for ((pixel, color) <- result.pixels) {
         f.img.setRGB(pixel.x, pixel.y, color.toRGB.toInt)
       }
