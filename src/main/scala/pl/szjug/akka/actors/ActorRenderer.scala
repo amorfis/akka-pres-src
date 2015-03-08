@@ -9,23 +9,23 @@ class ActorRenderer extends Actor with ActorLogging {
   @throws[Exception](classOf[Exception])
   override def preStart() = {
     super.preStart()
-    log.debug("Renderer actor started")
+    log.debug("Starting ActorRenderer")
   }
 
   override def receive = {
     case j: Job =>
-      log.debug("Renderer actor received job")
+      log.debug("Job received")
       val renderer = new JuliaRenderer(j, j.imgRegion)
       // Actor is blocked here
       val pixels = renderer.render()
+      log.debug("Sending pixels")
       sender ! pixels
-      log.debug("Renderer actor sent work done")
+      log.debug("Pixels sent")
   }
 
   @throws[Exception](classOf[Exception])
   override def postStop() = {
     super.postStop()
-    log.debug("Renderer actor stopped")
   }
 }
 
