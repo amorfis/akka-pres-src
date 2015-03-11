@@ -7,7 +7,7 @@ import com.mkrcah.fractals.Size2i
 import pl.szjug.fractals.Result
 import pl.szjug.swing.ImgFrame
 
-abstract class MasterActor(imgSize: Size2i) extends Actor with ActorLogging {
+abstract class PaintingResultsActor(imgSize: Size2i) extends Actor with ActorLogging {
 
   val img = new BufferedImage(imgSize.width, imgSize.height, BufferedImage.TYPE_INT_RGB)
   val f = ImgFrame(img)

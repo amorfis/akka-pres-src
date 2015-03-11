@@ -12,5 +12,6 @@ libraryDependencies ++= Seq(
   "org.slf4j" % "slf4j-api" % "1.7.6",
   "ch.qos.logback" % "logback-classic" % "1.1.2",
   "ch.qos.logback" % "logback-core" % "1.1.2",
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0"
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
+  "com.typesafe.akka" %% "akka-cluster" % "2.3.9"
 )

@@ -6,7 +6,6 @@ import pl.szjug.fractals.{Job, JuliaRenderer}
 class ActorRenderer extends Actor with ActorLogging {
 
 
-  @throws[Exception](classOf[Exception])
   override def preStart() = {
     super.preStart()
     log.debug("Starting ActorRenderer")
@@ -21,11 +20,6 @@ class ActorRenderer extends Actor with ActorLogging {
       log.debug("Sending pixels")
       sender ! pixels
       log.debug("Pixels sent")
-  }
-
-  @throws[Exception](classOf[Exception])
-  override def postStop() = {
-    super.postStop()
   }
 }
 
