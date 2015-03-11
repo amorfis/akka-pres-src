@@ -11,9 +11,12 @@ object RunManyActors extends App with LazyLogging {
 
   val system = ActorSystem("actorSystem")
 
-  val master = system.actorOf(Props(new ManyActorsMaster(imageSize, classOf[ActorRenderer])), "master")
+  val Rows = 2
+  val Columns = 4
 
-  logger.info("Starting!")
+  val workers = for (i <- 1 to Rows * Columns) yield system.actorOf(Props[ActorRenderer])
 
-  master ! Job(imageSize, Region2i(imageSize), HuePalette, quality)
+  val master = system.actorOf(Props(classOf[ManyActorsMaster], imageSize, workers), "master")
+
+  master ! Job(imageSize, Region2i(imageSize), palette, quality)
 }

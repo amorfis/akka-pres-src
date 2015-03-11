@@ -4,9 +4,7 @@ import akka.actor._
 import akka.cluster.Cluster
 import akka.cluster.ClusterEvent._
 import com.mkrcah.fractals.Size2i
-import pl.szjug.akka.actors.ActorRenderer
 import pl.szjug.akka.c3.manyactors.ManyActorsMaster
-import pl.szjug.fractals.Job
 
 class SimpleClusterListener extends Actor with ActorLogging {
 
@@ -37,24 +35,24 @@ class SimpleClusterListener extends Actor with ActorLogging {
   }
 }
 
-class ClusterActorsMaster(imgSize: Size2i) extends ManyActorsMaster(imgSize, classOf[ActorRenderer]) {
+class ClusterActorsMaster(imgSize: Size2i) extends ManyActorsMaster(imgSize, null) {
 
-  override val Rows = 20
-  override val Columns = 40
+//  override val Rows = 20
+//  override val Columns = 40
+//
+//  override val workers = for(i <- 1 to Rows * Columns) yield {
+//    val worker = context.actorOf(Props[ActorRenderer], s"remote$i")
+//    log.info(s"Created remote actor ${worker.path}")
+//    worker
+//  }
 
-  override val workers = for(i <- 1 to Rows * Columns) yield {
-    val worker = context.actorOf(Props[ActorRenderer], s"remote$i")
-    log.info(s"Created remote actor ${worker.path}")
-    worker
-  }
-
-  override val handleJob: Receive = {
-    case Job(size, _, palette, quality) =>
-      val regions = divideIntoParts(size, Rows, Columns)
-      for (i <- 0 to regions.size - 1) {
-        context.actorOf(Props[ActorRenderer])
-        val job = Job(size, regions(i), palette, quality)
-        workers(0) ! job
-      }
-  }
+//  override val handleJob: Receive = {
+//    case Job(size, _, palette, quality) =>
+//      val regions = divideIntoParts(size, Rows, Columns)
+//      for (i <- 0 to regions.size - 1) {
+//        context.actorOf(Props[ActorRenderer])
+//        val job = Job(size, regions(i), palette, quality)
+//        workers(0) ! job
+//      }
+//  }
 }

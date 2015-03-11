@@ -24,13 +24,14 @@ object RunLocalActors extends App with LazyLogging {
 
   val remoteRenderer = system.actorSelection(s"akka.tcp://remoteActorSystem@$remoteHost:2552/user/remoteRenderer")
 
-  implicit val timeout: Timeout = 1 second
+  implicit val timeout: Timeout = 3 seconds
 
   val f = remoteRenderer ? Identify(0)
   f.onSuccess({
     case ActorIdentity(_, Some(ref)) =>
       val master = system.actorOf(Props(classOf[SimpleActorMaster], imageSize, ref))
       master ! Job(imageSize, Region2i(imageSize), palette, quality)
+
     case a: Any => logger.error(s"Returned $a instead of ActorIdentity")
   })
   f.onFailure({

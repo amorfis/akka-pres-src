@@ -7,7 +7,8 @@ class JuliaRenderer(imageSize: Size2i = Size2i(1000, 1000), palette: Palette, qu
 
   def this(job: Job, regionToRender: Region2i) = this(job.imgSize, job.palette, job.quality, regionToRender)
 
-  val region = Region2c(Complex(-2, 1.2), Complex(2, -1.2))
+//  val region = Region2c(Complex(-2, 1.2), Complex(2, -1.2))
+  val region = Region2c(Complex(-1, 0.7), Complex(1, -0.7))
   assertWholeRegionInPicture(imageSize, partToRender)
 
   private def assertWholeRegionInPicture(picture: Size2i, region: Region2i): Unit = {
