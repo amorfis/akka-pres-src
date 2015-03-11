@@ -1,6 +1,6 @@
 package pl.szjug.akka.c3.manyactors
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ActorRef, ActorSystem, Props}
 import com.mkrcah.fractals._
 import com.typesafe.scalalogging.LazyLogging
 import pl.szjug.fractals.Job
@@ -14,7 +14,10 @@ object RunManyActors extends App with LazyLogging {
   val Rows = 2
   val Columns = 4
 
-  val workers = for (i <- 1 to Rows * Columns) yield system.actorOf(Props[ActorRenderer])
+  val workers = for (i <- 1 to Rows * Columns) yield {
+    val ref = system.actorOf(Props[ActorRenderer])
+    system.actorSelection(ref.path)
+  }
 
   val master = system.actorOf(Props(classOf[ManyActorsMaster], imageSize, workers), "master")
 

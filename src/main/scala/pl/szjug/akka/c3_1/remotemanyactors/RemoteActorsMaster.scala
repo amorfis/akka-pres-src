@@ -7,9 +7,9 @@ import pl.szjug.fractals.Job
 
 import scala.util.Random
 
-class RemoteActorsMaster(imgSize: Size2i, workers: Seq[ActorRef], rows: Int, cols: Int) extends ManyActorsMaster(imgSize, workers) {
+class RemoteActorsMaster(imgSize: Size2i, workers: Seq[ActorSelection], rows: Int, cols: Int) extends ManyActorsMaster(imgSize, workers) {
 
-  override val handleJob: Receive = {
+  override def handleJob(workers: Seq[ActorSelection]): Receive = {
     case Job(size, _, palette, quality) =>
       val regions = divideIntoParts(size, rows, cols)
       for (i <- 0 to regions.size - 1) {

@@ -1,23 +1,21 @@
 package pl.szjug.akka.actors
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor.{ActorSelection, ActorRef, Actor}
 import com.mkrcah.fractals.{Point2i, Region2i, Size2i}
 import pl.szjug.fractals.Job
 
 trait JobHandling {
   extendee: Actor =>
 
-  val workers: Seq[ActorRef]
-
-  val handleJob: Receive = {
+  def handleJob(workers: Seq[ActorSelection]): Receive = {
     case Job(size, _, palette, quality) =>
       val regions = divideIntoParts(size, 1, workers.size)
-      for (i <- 0 to regions.size - 1) {
-        workers(i).tell(Job(size, regions(i), palette, quality), self)
+      for ((worker, region) <- workers.zip(regions)) {
+        worker ! Job(size, region, palette, quality)
       }
   }
 
-  def divideIntoParts(size: Size2i, rowsCount: Int, columnsCount: Int) = {
+  def divideIntoParts(size: Size2i, rowsCount: Int, columnsCount: Int): Seq[Region2i] = {
     val colWidth = size.width / columnsCount
     val remainingWidth = size.width % columnsCount
     val rowHeight = size.height / rowsCount

@@ -1,6 +1,6 @@
 package pl.szjug.akka.c4.failingactor
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ActorSelection, ActorSystem, Props}
 import com.mkrcah.fractals._
 import com.typesafe.scalalogging.LazyLogging
 import pl.szjug.akka.Constants._
@@ -14,8 +14,7 @@ object RunBrokenActors extends App with LazyLogging {
 
   val workers = for (i <- 1 to 16) yield {
     val worker = system.actorOf(Props[BrokenActorRenderer], s"worker$i")
-    logger.info(s"Created remote actor ${worker.path}")
-    worker
+    system.actorSelection(worker.path)
   }
 
   val master = system.actorOf(Props(classOf[ManyActorsMaster], imageSize, workers), "master")

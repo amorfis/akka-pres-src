@@ -13,11 +13,6 @@ object RunCluster extends App with LazyLogging {
   val system = ActorSystem("ClusterSystem", config)
   val imageSize = Size2i(1000, 800)
 
-//  Cluster.get(system).join(Address("akka.tcp", "remoteActorSystem", "192.168.50.4", 2552))
-
-//  system.actorOf(Props[SimpleClusterListener], name = "clusterListener")
   val master = system.actorOf(Props(new ClusterActorsMaster(imageSize)), "master")
-//
-  master ! Job(imageSize, Region2i(imageSize), HuePalette, quality)
 }
 
