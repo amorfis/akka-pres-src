@@ -43,6 +43,6 @@ class JuliaRenderer(imageSize: Size2i = Size2i(1000, 1000), palette: Palette, qu
       (pixel, palette.get(colorIdx))
     }
 
-    Result(pixels, imageSize, partToRender, quality)
+    Result(pixels, partToRender)
   }
 }
