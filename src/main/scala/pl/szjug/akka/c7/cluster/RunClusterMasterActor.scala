@@ -14,8 +14,7 @@ object RunClusterMasterActor extends App with LazyLogging {
     .withFallback(ConfigFactory.parseString("akka.cluster.roles=[master]"))
     .withFallback(ConfigFactory.load("cluster-application.conf"))
   val system = ActorSystem("ClusterSystem", config)
-  val imageSize = Size2i(1000, 800)
 
-  val actor = system.actorOf(Props(classOf[ClusterActorsMaster], imageSize), "master")
+  val actor = system.actorOf(Props(classOf[ClusterActorsMaster]), "master")
 }
 

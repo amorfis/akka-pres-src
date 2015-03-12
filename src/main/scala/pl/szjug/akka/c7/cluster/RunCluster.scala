@@ -1,6 +1,6 @@
 package pl.szjug.akka.c7.cluster
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{PoisonPill, ActorSystem, Props}
 import com.mkrcah.fractals._
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
@@ -15,5 +15,12 @@ object RunCluster extends App with LazyLogging {
   val system = ActorSystem("ClusterSystem", config)
 
   val worker = system.actorOf(Props[ActorRenderer], "worker")
+
+  Runtime.getRuntime.addShutdownHook(new Thread() {
+    override def run = {
+      println("Shutting down the actor")
+      worker ! PoisonPill
+    }
+  })
 }
 

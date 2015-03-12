@@ -1,16 +1,15 @@
 package pl.szjug.akka.c7.cluster
 
 import akka.actor._
-import akka.cluster.{MemberStatus, Cluster}
+import akka.cluster.Cluster
 import akka.cluster.ClusterEvent._
-import com.mkrcah.fractals.{Palette, Region2i, Size2i}
-import pl.szjug.akka.Constants._
+import com.mkrcah.fractals.Size2i
 import pl.szjug.akka.actors.{JobHandling, PaintingResultsActor}
 import pl.szjug.fractals.{Result, Job}
 
 import scala.util.Random
 
-class ClusterActorsMaster(imgSize: Size2i) extends PaintingResultsActor(imgSize) with JobHandling {
+class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
 
   val MinWorkers = 2
 
@@ -30,32 +29,23 @@ class ClusterActorsMaster(imgSize: Size2i) extends PaintingResultsActor(imgSize)
 
   override def postStop(): Unit = cluster.unsubscribe(self)
 
-  def randomWorker = workers.toSeq(Random.nextInt(workers.size))
-
-  def acceptJobIfHasWorkers() = {
+  var newWorkerAdded: () => Unit = { () =>
     if (workers.size >= MinWorkers) {
-      log.info("Accepting jobs")
-      context become (acceptJob orElse handleClusterMembers orElse paintResultPixels)
+      log.info("Has enough workers. Accepting job")
+      context become (handleClusterMembers orElse acceptJob)
+      newWorkerAdded = () => {}
     }
   }
 
-  val waitForWorkers: Receive = {
-    case _: Job =>
-      log.info("Not accepting the job. Waiting for workers")
-  }
+  def randomWorker = workers.toSeq(Random.nextInt(workers.size))
 
   val acceptJob: Receive = {
     case Job(size, region, pal, q) =>
-      log.info("Accepting the job. Nom nom nom....")
-      val regions = divideIntoParts(size, 100, 10)
+      log.info("Accepting the job. Om nom nom....")
+      val regions = divideIntoParts(size, 300, 100)
       jobsForWorkers = regions.map(Job(size, _, pal, q))
       sendJobsToWorkers
-    case PartialJob(size, regions, pal, q) =>
-      log.info("Sending partial job to worker")
-      randomWorker ! Job(size, regions.head, pal, q)
-      if (regions.size > 1) {
-        self ! PartialJob(size, regions.tail, pal, q)
-      }
+      context become (handleClusterMembers orElse acceptJob orElse paintResultPixels(size))
   }
 
   def wantedJobsSent = workers.size * 2
@@ -70,11 +60,15 @@ class ClusterActorsMaster(imgSize: Size2i) extends PaintingResultsActor(imgSize)
     jobsSentToWorkers = jobsSentToWorkers + jobsToSend
   }
 
-  override def paintResultPixels: Receive = {
-    case r: Result =>
-      jobsSentToWorkers -= 1
-      super.paintResultPixels(r)
-      sendJobsToWorkers
+  override def paintResultPixels(imgSize: Size2i): Receive = {
+    val superPaintResult = super.paintResultPixels(imgSize)
+
+    {
+      case r: Result =>
+        jobsSentToWorkers -= 1
+        superPaintResult(r)
+        sendJobsToWorkers
+    }
   }
 
   def actorSelection(address: Address) = {
@@ -83,8 +77,9 @@ class ClusterActorsMaster(imgSize: Size2i) extends PaintingResultsActor(imgSize)
 
   val handleClusterMembers: Receive = {
     case MemberUp(member) if member.hasRole("worker") =>
+      log.info("Worker added to cluster")
       workers = workers + actorSelection(member.address)
-      acceptJobIfHasWorkers()
+      newWorkerAdded()
     case UnreachableMember(member) if member.hasRole("worker") =>
       log.info("Worker detected as unreachable: {}", member)
       workers = workers - actorSelection(member.address)
@@ -93,7 +88,5 @@ class ClusterActorsMaster(imgSize: Size2i) extends PaintingResultsActor(imgSize)
     case _: MemberEvent => // ignore
   }
 
-  val receive = waitForWorkers orElse handleClusterMembers
-
-  case class PartialJob(imgSize: Size2i, regionsToHandle: Seq[Region2i], palette: Palette, quality: Int)
+  val receive = handleClusterMembers
 }
