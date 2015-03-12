@@ -16,7 +16,11 @@ abstract class PaintingResultsActor(imgSize: Size2i) extends Actor with ActorLog
     case result: Result =>
       log.info(s"Result received from $sender!")
       for ((pixel, color) <- result.pixels) {
-        f.img.setRGB(pixel.x, pixel.y, color.toRGB.toInt)
+        try {
+          f.img.setRGB(pixel.x, pixel.y, color.toRGB.toInt)
+        } catch {
+          case e: ArrayIndexOutOfBoundsException => log.error(s"Pixel: $pixel", e)
+        }
       }
       val reg = result.imgPart
       f.repaintImagePart(reg.tl.x, reg.tl.y, reg.width, reg.height)
