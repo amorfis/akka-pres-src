@@ -12,7 +12,7 @@ abstract class PaintingResultsActor(imgSize: Size2i) extends Actor with ActorLog
   val img = new BufferedImage(imgSize.width, imgSize.height, BufferedImage.TYPE_INT_RGB)
   val f = ImgFrame(img)
 
-  val paintResultPixels: Receive = {
+  def paintResultPixels: Receive = {
     case result: Result =>
       log.info(s"Result received from $sender!")
       for ((pixel, color) <- result.pixels) {

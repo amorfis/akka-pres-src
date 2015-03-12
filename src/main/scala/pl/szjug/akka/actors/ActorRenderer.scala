@@ -13,13 +13,13 @@ class ActorRenderer extends Actor with ActorLogging {
 
   override def receive = {
     case j: Job =>
-      log.debug("Job received")
+      log.info("Job received")
       val renderer = new JuliaRenderer(j, j.imgRegion)
       // Actor is blocked here
       val pixels = renderer.render()
-      log.debug("Sending pixels")
+      log.info("Sending pixels")
       sender ! pixels
-      log.debug("Pixels sent")
+      log.info("Pixels sent")
   }
 }
 
