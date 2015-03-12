@@ -37,6 +37,4 @@ object RunLocalActors extends App with LazyLogging {
   f.onFailure({
     case e: Exception => logger.error("Could not get remote actor ActorRef", e)
   })
-
-
 }

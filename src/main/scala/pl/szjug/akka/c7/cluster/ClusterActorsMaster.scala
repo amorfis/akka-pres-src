@@ -5,7 +5,7 @@ import akka.cluster.Cluster
 import akka.cluster.ClusterEvent._
 import com.mkrcah.fractals.Size2i
 import pl.szjug.akka.actors.{JobHandling, PaintingResultsActor}
-import pl.szjug.fractals.{Result, Job}
+import pl.szjug.fractals.{JobToDivide, Result, Job}
 
 import scala.util.Random
 
@@ -40,9 +40,9 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
   def randomWorker = workers.toSeq(Random.nextInt(workers.size))
 
   val acceptJob: Receive = {
-    case Job(size, region, pal, q) =>
+    case JobToDivide(size, rows, cols, pal, q) =>
       log.info("Accepting the job. Om nom nom....")
-      val regions = divideIntoParts(size, 300, 100)
+      val regions = divideIntoParts(size, rows, cols)
       jobsForWorkers = regions.map(Job(size, _, pal, q))
       sendJobsToWorkers
       context become (handleClusterMembers orElse acceptJob orElse paintResultPixels(size))

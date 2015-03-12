@@ -20,6 +20,7 @@ object RunWorkerInCluster extends App with LazyLogging {
     override def run = {
       println("Shutting down the actor")
       worker ! PoisonPill
+      Thread.sleep(5000L)
     }
   })
 }
