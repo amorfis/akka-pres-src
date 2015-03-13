@@ -15,13 +15,5 @@ object RunWorkerInCluster extends App with LazyLogging {
   val imageSize = Size2i(1000, 800)
 
   val worker = system.actorOf(Props[ActorRenderer], "worker")
-
-  Runtime.getRuntime.addShutdownHook(new Thread() {
-    override def run = {
-      println("Shutting down the actor")
-      worker ! PoisonPill
-      Thread.sleep(5000L)
-    }
-  })
 }
 

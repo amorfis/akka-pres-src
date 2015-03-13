@@ -15,12 +15,5 @@ object RunCluster extends App with LazyLogging {
   val system = ActorSystem("ClusterSystem", config)
 
   val worker = system.actorOf(Props[ActorRenderer], "worker")
-
-  Runtime.getRuntime.addShutdownHook(new Thread() {
-    override def run = {
-      println("Shutting down the actor")
-      worker ! PoisonPill
-    }
-  })
 }
 

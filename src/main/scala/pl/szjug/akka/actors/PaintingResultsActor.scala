@@ -15,7 +15,6 @@ abstract class PaintingResultsActor extends Actor with ActorLogging {
 
     {
       case result: Result =>
-        log.info(s"Result received from $sender!")
         for ((pixel, color) <- result.pixels) {
           try {
             f.img.setRGB(pixel.x, pixel.y, color.toRGB.toInt)
