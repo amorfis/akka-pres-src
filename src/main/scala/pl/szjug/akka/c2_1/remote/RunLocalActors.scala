@@ -18,7 +18,7 @@ object RunLocalActors extends App with LazyLogging {
   val remoteHost = ConfigFactory.load("remote-on-virtual.conf").getString("remote.netty.tcp.hostname")
 
   val config = ConfigFactory.load("remote-single-application-host.conf")
-  val system = ActorSystem("remoteActorSystem", config)
+  val system = ActorSystem("actorSystem", config)
 
   logger.info("Created local ActorSystem. Connecting to remote actors.")
 
