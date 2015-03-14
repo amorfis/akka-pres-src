@@ -1,4 +1,4 @@
-package pl.szjug.akka.c7.cluster
+package pl.szjug.akka.c8.cluster
 
 import akka.actor.{RootActorPath, ActorPath, ActorSystem}
 import akka.cluster.Cluster

@@ -1,8 +1,8 @@
-package pl.szjug.akka.c3_1.remotemanyactors
+package pl.szjug.akka.c5.remotemanyactors
 
 import akka.actor._
 import com.mkrcah.fractals.Size2i
-import pl.szjug.akka.c3.manyactors.ManyActorsMaster
+import pl.szjug.akka.c4.manyactors.ManyActorsMaster
 import pl.szjug.fractals.{JobToDivide, Job}
 
 import scala.util.Random

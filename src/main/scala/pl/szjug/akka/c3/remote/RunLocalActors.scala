@@ -1,4 +1,4 @@
-package pl.szjug.akka.c2_1.remote
+package pl.szjug.akka.c3.remote
 
 import akka.actor._
 import akka.pattern.ask

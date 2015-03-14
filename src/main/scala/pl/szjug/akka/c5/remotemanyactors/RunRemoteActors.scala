@@ -1,4 +1,4 @@
-package pl.szjug.akka.c3_1.remotemanyactors
+package pl.szjug.akka.c5.remotemanyactors
 
 import akka.actor.{ActorSystem, AddressFromURIString, Deploy, Props}
 import akka.remote.RemoteScope

@@ -1,4 +1,4 @@
-package pl.szjug.akka.c3.manyactors
+package pl.szjug.akka.c4.manyactors
 
 import akka.actor.ActorSelection
 import com.mkrcah.fractals.Size2i

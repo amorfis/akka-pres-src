@@ -1,4 +1,4 @@
-package pl.szjug.akka.c7.cluster
+package pl.szjug.akka.c8.cluster
 
 import akka.actor.{PoisonPill, ActorSystem, Props}
 import com.mkrcah.fractals._

@@ -1,4 +1,4 @@
-package pl.szjug.akka.c5.failingrecoveringactor
+package pl.szjug.akka.c7.failingrecoveringactor
 
 import akka.actor.SupervisorStrategy.Restart
 import akka.actor.{ActorRef, OneForOneStrategy, Props}

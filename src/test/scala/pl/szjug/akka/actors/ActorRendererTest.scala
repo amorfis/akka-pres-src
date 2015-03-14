@@ -2,7 +2,7 @@ package pl.szjug.akka.actors
 
 import akka.testkit.TestActor.AutoPilot
 import com.mkrcah.fractals._
-import pl.szjug.akka.c3.manyactors.ManyActorsMaster
+import pl.szjug.akka.c4.manyactors.ManyActorsMaster
 import pl.szjug.fractals.{Result, Job}
 import scala.concurrent.duration._
 
