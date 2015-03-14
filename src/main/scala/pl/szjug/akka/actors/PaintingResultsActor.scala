@@ -18,12 +18,11 @@ abstract class PaintingResultsActor extends Actor with ActorLogging {
         for ((pixel, color) <- result.pixels) {
           try {
             f.img.setRGB(pixel.x, pixel.y, color.toRGB.toInt)
+            f.repaintImagePart(pixel.x, pixel.y, 1, 1)
           } catch {
             case e: ArrayIndexOutOfBoundsException => log.error(e, s"Pixel: $pixel")
           }
         }
-        val reg = result.imgPart
-        f.repaintImagePart(reg.tl.x, reg.tl.y, reg.width, reg.height)
     }
   }
 }
