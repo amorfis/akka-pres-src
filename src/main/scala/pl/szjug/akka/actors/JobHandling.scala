@@ -8,10 +8,10 @@ trait JobHandling {
   extendee: Actor =>
 
   def handleJob(workers: Seq[ActorSelection]): Receive = {
-    case Job(size, _, palette, quality) =>
+    case Job(size, _, palette) =>
       val regions = divideIntoParts(size, 1, workers.size)
       for ((worker, region) <- workers.zip(regions)) {
-        worker ! Job(size, region, palette, quality)
+        worker ! Job(size, region, palette)
       }
   }
 

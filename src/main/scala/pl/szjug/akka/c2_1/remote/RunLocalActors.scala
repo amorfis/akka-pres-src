@@ -30,7 +30,7 @@ object RunLocalActors extends App with LazyLogging {
   f.onSuccess({
     case ActorIdentity(_, Some(ref)) =>
       val master = system.actorOf(Props(classOf[SimpleActorMaster], imageSize, ref))
-      master ! Job(imageSize, Region2i(imageSize), palette, quality)
+      master ! Job(imageSize, Region2i(imageSize), palette)
 
     case a: Any => logger.error(s"Returned $a instead of ActorIdentity")
   })

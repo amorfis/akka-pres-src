@@ -5,7 +5,7 @@ import com.typesafe.scalalogging.LazyLogging
 
 class JuliaRenderer(imageSize: Size2i = Size2i(1000, 1000), palette: Palette, quality: Int = 300, partToRender: Region2i) extends LazyLogging {
 
-  def this(job: Job) = this(job.imgSize, job.palette, job.quality, job.imgRegion)
+  def this(job: Job) = this(job.imgSize, job.palette, 300, job.imgRegion)
 
 //  val region = Region2c(Complex(-2, 1.2), Complex(2, -1.2))
   val region = Region2c(Complex(-1, 0.7), Complex(1, -0.7))

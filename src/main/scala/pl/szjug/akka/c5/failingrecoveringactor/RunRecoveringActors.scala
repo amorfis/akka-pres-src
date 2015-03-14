@@ -12,5 +12,5 @@ object RunRecoveringActors extends App with LazyLogging {
 
   val master = system.actorOf(Props(new RecoveringActorsMaster(imageSize)), "master")
 
-  master ! Job(imageSize, Region2i(imageSize), HuePalette, quality)
+  master ! Job(imageSize, Region2i(imageSize), HuePalette)
 }

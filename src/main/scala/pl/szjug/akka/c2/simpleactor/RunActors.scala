@@ -15,5 +15,5 @@ object RunActors extends App with LazyLogging {
   val worker = system.actorOf(Props[ActorRenderer], "worker")
   val master = system.actorOf(Props(classOf[SimpleActorMaster], imageSize, worker), "master")
 
-  master ! Job(imageSize, Region2i(imageSize), HuePalette, quality)
+  master ! Job(imageSize, Region2i(imageSize), HuePalette)
 }

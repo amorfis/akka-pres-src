@@ -13,7 +13,7 @@ class RemoteActorsMaster(imgSize: Size2i, workers: Seq[ActorSelection]) extends 
     case JobToDivide(size, rows, cols, palette, quality) =>
       val regions = divideIntoParts(size, rows, cols)
       for (i <- 0 to regions.size - 1) {
-        val job = Job(size, regions(i), palette, quality)
+        val job = Job(size, regions(i), palette)
         workers(Random.nextInt(workers.size)) ! job
       }
   }

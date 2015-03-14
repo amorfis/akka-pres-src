@@ -45,7 +45,7 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
       val regions = divideIntoParts(size, rows, cols)
 
       val jobsForWorkers = regions.zipWithIndex.map({
-        case (r, n) => JobWithId(n, size, r, pal, q)
+        case (r, n) => JobWithId(n, size, r, pal)
       })
       workersJobsHandler = new WorkersJobsHandler(jobsForWorkers)
       workersJobsHandler.sendNextBatch(workers)

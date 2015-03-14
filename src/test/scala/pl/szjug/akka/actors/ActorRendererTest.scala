@@ -22,7 +22,7 @@ class ActorRendererTest extends TestKit(ActorSystem())
       val size = Size2i(2, 2)
 
       // When
-      actorRenderer ! Job(size, Region2i(size), HuePalette, 300)
+      actorRenderer ! Job(size, Region2i(size), HuePalette)
 
       // Then
       val expectedResult = Result(
@@ -51,7 +51,7 @@ class ActorRendererTest extends TestKit(ActorSystem())
 
       val master = TestActorRef(Props(new ManyActorsMaster(imgSize, workersSelections)))
 
-      master ! Job(imgSize, Region2i(imgSize), HuePalette, 300)
+      master ! Job(imgSize, Region2i(imgSize), HuePalette)
 
       for(i <- 1 to 3) {
         expectMsgPF(2 seconds) {
