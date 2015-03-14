@@ -20,7 +20,7 @@ object RunSingleThread extends App with LazyLogging {
 
   for((pixel, color) <- colorsForPixels.pixels) {
     img.setRGB(pixel.x, pixel.y, color.toRGB.toInt)
+    f.repaint()
   }
 
-  f.repaint()
 }
