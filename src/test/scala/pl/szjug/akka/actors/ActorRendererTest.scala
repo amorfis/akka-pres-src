@@ -39,7 +39,7 @@ class ActorRendererTest extends TestKit(ActorSystem())
   "ManyActorsMaster" should {
     "Send jobs to workers from cluster" in {
       val workersProbes = for(i <- 1 to 3) yield { TestProbe() }
-      val workersSelections = workersProbes.map(probe => system.actorSelection(probe.ref.path))
+      val workersRefs = workersProbes.map(_.ref)
       val imgSize = Size2i(10, 10)
 
       workersProbes.foreach(_.setAutoPilot(new AutoPilot {
@@ -49,7 +49,7 @@ class ActorRendererTest extends TestKit(ActorSystem())
         }
       }))
 
-      val master = TestActorRef(Props(new ManyActorsMaster(imgSize, workersSelections)))
+      val master = TestActorRef(Props(new ManyActorsMaster(imgSize, workersRefs)))
 
       master ! Job(imgSize, Region2i(imgSize), HuePalette)
 

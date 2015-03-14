@@ -13,8 +13,7 @@ object RunBrokenActors extends App with LazyLogging {
   val system = ActorSystem("actorSystem")
 
   val workers = for (i <- 1 to 16) yield {
-    val worker = system.actorOf(Props[BrokenActorRenderer], s"worker$i")
-    system.actorSelection(worker.path)
+    system.actorOf(Props[BrokenActorRenderer], s"worker$i")
   }
 
   val master = system.actorOf(Props(classOf[ManyActorsMaster], imageSize, workers), "master")

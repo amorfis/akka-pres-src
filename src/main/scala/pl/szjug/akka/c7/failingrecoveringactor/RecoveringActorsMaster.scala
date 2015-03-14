@@ -10,10 +10,7 @@ import scala.util.Random
 
 class RecoveringActorsMaster(imgSize: Size2i) extends PaintingResultsActor with JobHandling {
 
-  val workers = for (i <- 1 to 100) yield {
-    val actorRef = context.actorOf(Props[BrokenActorRenderer])
-    context.actorSelection(actorRef.path)
-  }
+  val workers = for (i <- 1 to 100) yield context.actorOf(Props[BrokenActorRenderer])
 
   override val receive = handleJob(workers) orElse paintResultPixels(imgSize)
 

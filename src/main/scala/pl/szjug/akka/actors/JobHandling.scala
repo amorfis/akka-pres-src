@@ -1,17 +1,25 @@
 package pl.szjug.akka.actors
 
 import akka.actor.{ActorSelection, ActorRef, Actor}
-import com.mkrcah.fractals.{Point2i, Region2i, Size2i}
-import pl.szjug.fractals.Job
+import com.mkrcah.fractals.{Palette, Point2i, Region2i, Size2i}
+import pl.szjug.fractals.{JobToDivide, Job}
+
+import scala.util.Random
 
 trait JobHandling {
   extendee: Actor =>
 
-  def handleJob(workers: Seq[ActorSelection]): Receive = {
+  def handleJob(workers: Seq[ActorRef]): Receive = {
     case Job(size, _, palette) =>
       val regions = divideIntoParts(size, 1, workers.size)
       for ((worker, region) <- workers.zip(regions)) {
         worker ! Job(size, region, palette)
+      }
+
+    case JobToDivide(size, rows, cols, palette, quality) =>
+      val regions = divideIntoParts(size, rows, cols)
+      for (region <- regions) {
+        workers(Random.nextInt(workers.size)) ! Job(size, region, palette)
       }
   }
 

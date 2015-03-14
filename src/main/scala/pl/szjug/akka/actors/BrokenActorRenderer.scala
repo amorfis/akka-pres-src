@@ -11,11 +11,7 @@ class BrokenActorRenderer extends ActorRenderer {
       if (Random.nextInt(4) == 0) {
         throw new RendererException(j)
       }
-
-      val renderer = new JuliaRenderer(j)
-      // Actor is blocked here
-      val pixels = renderer.render()
-      sender ! pixels
+      super.receive(j)
   }
 }
 
