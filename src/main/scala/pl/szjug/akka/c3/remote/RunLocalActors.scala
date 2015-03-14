@@ -16,8 +16,8 @@ object RunLocalActors extends App with LazyLogging {
 
   val imageSize = Size2i(80, 40)
   val remoteHost = ConfigFactory.load("remote-on-virtual.conf").getString("remote.netty.tcp.hostname")
-
   val config = ConfigFactory.load("remote-single-application-host.conf")
+
   val system = ActorSystem("actorSystem", config)
 
   logger.info("Created local ActorSystem. Connecting to remote actors.")
@@ -27,12 +27,12 @@ object RunLocalActors extends App with LazyLogging {
   implicit val timeout: Timeout = 3 seconds
 
   val f = remoteRenderer ? Identify(0)
+
   f.onSuccess({
     case ActorIdentity(_, Some(ref)) =>
+
       val master = system.actorOf(Props(classOf[SimpleActorMaster], imageSize, ref))
       master ! Job(imageSize, Region2i(imageSize), palette)
-
-    case a: Any => logger.error(s"Returned $a instead of ActorIdentity")
   })
   f.onFailure({
     case e: Exception => logger.error("Could not get remote actor ActorRef", e)
