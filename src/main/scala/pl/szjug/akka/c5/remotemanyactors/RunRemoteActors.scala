@@ -12,13 +12,11 @@ import pl.szjug.fractals.{JobToDivide, Job}
 object RunRemoteActors extends App with LazyLogging {
 
   val config = ConfigFactory.load("remote-many-application-host.conf")
-  val system = ActorSystem("remoteActorSystem", config)
+  val system = ActorSystem("actorSystem", config)
   val remoteHost = ConfigFactory.load("remote-on-virtual.conf").getString("remote.netty.tcp.hostname")
 
-
-  val workers = for (i <- 1 to 4) yield {
-    val addressString = s"akka.tcp://remoteActorSystem@$remoteHost:2552"
-    val address = AddressFromURIString(addressString)
+  val workers = for (i <- 1 to 16) yield {
+    val address = AddressFromURIString(s"akka.tcp://remoteActorSystem@$remoteHost:2552")
     val worker = system.actorOf(Props[ActorRenderer].withDeploy(Deploy(scope = RemoteScope(address))), s"remote$i")
     logger.info(s"Created remote actor ${worker.path}")
     system.actorSelection(worker.path)
