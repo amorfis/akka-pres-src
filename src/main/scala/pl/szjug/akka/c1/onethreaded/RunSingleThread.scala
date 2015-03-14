@@ -15,12 +15,11 @@ object RunSingleThread extends App with LazyLogging {
   val img = new BufferedImage(imageSize.width, imageSize.height, BufferedImage.TYPE_INT_RGB)
   val f = ImgFrame(img)
 
-  val renderer = new JuliaRenderer(imageSize, HuePalette, quality, new Region2i(imageSize))
+  val renderer = new JuliaRenderer(imageSize, HuePalette, quality, Region2i(imageSize))
   val colorsForPixels = renderer.render()
 
   for((pixel, color) <- colorsForPixels.pixels) {
     img.setRGB(pixel.x, pixel.y, color.toRGB.toInt)
-    f.repaint()
+    f.repaintImagePart(pixel.x, pixel.y, 1, 1)
   }
-
 }
