@@ -11,10 +11,7 @@ object RunManyActors extends App with LazyLogging {
 
   val system = ActorSystem("actorSystem")
 
-  val Rows = 2
-  val Columns = 4
-
-  val workers = for (i <- 1 to Rows * Columns) yield {
+  val workers = for (i <- 1 to 30) yield {
     val ref = system.actorOf(Props[ActorRenderer])
     system.actorSelection(ref.path)
   }
