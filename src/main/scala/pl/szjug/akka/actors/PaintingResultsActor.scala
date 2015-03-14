@@ -16,12 +16,8 @@ abstract class PaintingResultsActor extends Actor with ActorLogging {
     {
       case result: Result =>
         for ((pixel, color) <- result.pixels) {
-          try {
-            f.img.setRGB(pixel.x, pixel.y, color.toRGB.toInt)
-            f.repaintImagePart(pixel.x, pixel.y, 1, 1)
-          } catch {
-            case e: ArrayIndexOutOfBoundsException => log.error(e, s"Pixel: $pixel")
-          }
+          f.img.setRGB(pixel.x, pixel.y, color.toRGB.toInt)
+          f.repaintImagePart(pixel.x, pixel.y, 1, 1)
         }
     }
   }
