@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Akka - Concurrent programming without the pain</title>
+
+  <meta name="description" content="A jQuery library for modern HTML presentations">
+  <meta name="author" content="Caleb Troughton">
+  <meta name="viewport" content="width=1024, user-scalable=no">
+
+  <!-- Core and extension CSS files -->
+  <link rel="stylesheet" media="screen" href="deck.js/core/deck.core.css">
+  <link rel="stylesheet" media="screen" href="deck.js/extensions/goto/deck.goto.css">
+  <link rel="stylesheet" media="screen" href="deck.js/extensions/menu/deck.menu.css">
+  <link rel="stylesheet" media="screen" href="deck.js/extensions/navigation/deck.navigation.css">
+  <link rel="stylesheet" media="screen" href="deck.js/extensions/status/deck.status.css">
+  <link rel="stylesheet" media="screen" href="deck.js/extensions/scale/deck.scale.css">
+
+  <!-- Style theme. More available in /themes/style/ or create your own. -->
+  <link rel="stylesheet" media="screen" href="deck.js/themes/style/my-neon.css">
+
+  <!-- Transition theme. More available in /themes/transition/ or create your own. -->
+  <link rel="stylesheet" media="screen" href="deck.js/themes/transition/horizontal-slide.css">
+
+  <!-- Basic black and white print styles -->
+  <link rel="stylesheet" media="print" href="deck.js/core/print.css">
+
+  <script src="deck.js/modernizr.custom.js"></script>
+</head>
+
+<body>
+  <div class="deck-container">
+
+    <!-- Begin slides -->
+    <section class="slide" id="title-slide">
+      <div class="vcenter">
+        <h1>Akka</h1>
+        <h3>Concurrent programming without the pain</h3>
+      </div>
+    </section>
+
+    <section class="slide">
+      <h2>Agenda</h2>
+        <h3>Why concurrency is hard?</h3>
+        <h3>How they did it in 1986</h3>
+        <h3>Become/unbecome</h3>
+        <h3>Simple local actor</h3>
+        <h3>Remote actor</h3>
+        <h3>Many actors</h3>
+        <h3>Fault tolerance</h3>
+        <h3>Routers</h3>
+        <h3>Clusters</h3>
+        <h3>Persistence</h3>
+        <h3>PubSub</h3>
+        <h3>Testowanie</h3>
+    </section>
+
+    <section class="slide">
+      <h2>Why concurrency is hard?</h2>
+      <h3 class="slide">Shared state</h3>
+      <img src="threads.png" class="slide" style="height: 18em; width: 15em"/>
+      <h3 class="slide">70 possibilities</h3>
+    </section>
+
+    <section class="slide">
+      <h2>Erlang foundations (from 1986)</h2>
+      <ol>
+        <li class="slide">
+          Share nothing. (Process cannot share data in any way.)
+        </li>
+        <li class="slide">
+          Pure message passing.
+        </li>
+        <li class="slide">
+          Crash detection and recovery. (Things will crash, so the best thing to do is let them crash and recover
+          afterwards.)
+        </li>
+      </ol>
+    </section>
+
+    <section class="slide">
+      <h2>What is actor?</h2>
+      <blockquote>
+        <p>An actor is a container for State, Behavior, a Mailbox, Children and a Supervisor Strategy</p>
+        <p><cite>Akka documentation</cite></p>
+      </blockquote>
+    </section>
+
+    <section class="slide">
+      <h1>Code</h1>
+    </section>
+
+    <!-- deck.status snippet -->
+    <p class="deck-status" aria-role="status">
+      <span class="deck-status-current"></span>
+      /
+      <span class="deck-status-total"></span>
+    </p>
+
+    <!-- deck.goto snippet -->
+    <form action="" method="get" class="goto-form">
+      <label for="goto-slide">Go to slide:</label>
+      <input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+      <datalist id="goto-datalist"></datalist>
+      <input type="submit" value="Go">
+    </form>
+
+    <p style="
+      position: fixed;
+      z-index: 4;
+      right: 10px;
+      font-size: medium;
+      top: 10px;
+  ">@pawelstawicki</p>
+  </div>
+
+
+<script src="deck.js/jquery.min.js"></script>
+  <script type="javascript">
+    $.extend(true, $[deck].defaults, {
+      classes: {
+        scale: 'deck-scale'
+      },
+
+      keys: {
+        scale: 83 // s
+      },
+
+      baseHeight: null,
+      scaleDebounce: 200
+    });
+  </script>
+
+<!-- Deck Core and extensions -->
+<script src="deck.js/core/deck.core.js"></script>
+<script src="deck.js/extensions/menu/deck.menu.js"></script>
+<script src="deck.js/extensions/goto/deck.goto.js"></script>
+<script src="deck.js/extensions/status/deck.status.js"></script>
+<script src="deck.js/extensions/navigation/deck.navigation.js"></script>
+<script src="deck.js/extensions/scale/deck.scale.js"></script>
+
+<!-- Initialize the deck -->
+<script>
+$(function() {
+  $.deck('.slide');
+});
+</script>
+
+</body>
+</html>

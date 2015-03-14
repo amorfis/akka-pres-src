@@ -1,4 +1,5 @@
 .idea
 target
-project/target
 **/.vagrant
+**/.DS_Store
+**/node_modules

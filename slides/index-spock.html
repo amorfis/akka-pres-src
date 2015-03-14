@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Spock</title>
+
+  <meta name="description" content="A jQuery library for modern HTML presentations">
+  <meta name="author" content="Caleb Troughton">
+  <meta name="viewport" content="width=1024, user-scalable=no">
+
+  <!-- Core and extension CSS files -->
+  <link rel="stylesheet" href="deck.js/core/deck.core.css">
+  <link rel="stylesheet" href="deck.js/extensions/goto/deck.goto.css">
+  <link rel="stylesheet" href="deck.js/extensions/menu/deck.menu.css">
+  <link rel="stylesheet" href="deck.js/extensions/navigation/deck.navigation.css">
+  <link rel="stylesheet" href="deck.js/extensions/status/deck.status.css">
+  <link rel="stylesheet" href="deck.js/extensions/hash/deck.hash.css">
+  <link rel="stylesheet" href="deck.js/extensions/scale/deck.scale.css">
+
+  <!-- Syntax highlighter -->
+  <link rel="stylesheet" href="syntaxhighlighter/styles/shCore.css">
+  <link rel="stylesheet" href="syntaxhighlighter/styles/shThemeDefault.css">
+  <script src="syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+  <script src="syntaxhighlighter/scripts/shBrushGroovy.js" type="text/javascript"></script>
+
+  <!-- Style theme. More available in /themes/style/ or create your own. -->
+  <link rel="stylesheet" href="deck.js/themes/style/web-2.0.css">
+
+  <!-- Transition theme. More available in /themes/transition/ or create your own. -->
+  <link rel="stylesheet" href="deck.js/themes/transition/horizontal-slide.css">
+
+  <script src="deck.js/modernizr.custom.js"></script>
+
+  <style type="text/css">
+      .groovy {
+          color: green;
+      }
+  </style>
+
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-601428-4']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
+
+</head>
+
+<body class="deck-container">
+
+<!-- Begin slides -->
+<section class="slide">
+  <h1>Spock</h1>
+</section>
+
+<section class="slide">
+  <h2>Groovy method names</h2>
+  <p>
+    Any string can be method name in groovy
+  </p>
+  <p><pre class="brush: groovy">
+def 'Should return true if number is even'() {
+  //...
+}
+  </pre></p>
+</section>
+
+<section class="slide">
+  <h2>Simple test</h2>
+  <pre class="brush: groovy">
+@Test
+def 'Should return true if number is even'() {
+  when:
+  def result = service.isEven(2)
+
+  then:
+  result == true
+  result
+}
+  </pre>
+  <p>
+  Everything after <em>then:</em> should resolve to <b>true</b>
+  </p>
+</section>
+
+<section class="slide">
+  <h2>Test with mock</h2>
+  <pre class="brush: groovy">
+@Test
+def 'Should return surname Stawicki if firstname is Paweł'() {
+  setup:
+  def Dao dao = Mock()
+  def dbService = new DbService(dao)
+  dao.findByFirstname("Paweł") >> new Person(
+          firstname: "Paweł", surname: "Stawicki")
+
+  when:
+  def result = dbService.getSurname("Paweł")
+
+  then:
+  result == "Stawicki"
+}
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>Mock method return specified in <em>then</em></h2>
+  <pre class="brush: groovy">
+@Test
+def 'Should return surname Stawicki if firstname is Paweł. Simplier method'() {
+  setup:
+  def Dao dao = Mock()
+  def dbService = new DbService(dao)
+
+  when:
+  def result = dbService.getSurname("Paweł")
+
+  then:
+  result == "Stawicki"
+  1 * dao.findByFirstname("Paweł") >> new Person(
+          firstname: "Paweł", surname: "Stawicki")
+}
+  </pre>
+</section>
+
+<section class="slide">
+    <h2>Common initialization in setup() method</h2>
+  <pre class="brush: groovy">
+def setup() {
+  dao.findByFirstname("Paweł") >> new Person(firstname: "Paweł", surname: "Stawicki")
+  dao.findByFirstname("Leszek") >> new Person(firstname: "Leszek", surname: "Gruchała")
+}
+  </pre>
+  <p>
+    <ul>
+      <li><span class="groovy">setup()</span> before every feature method</li>
+      <li><span class="groovy">cleanup()</span> after every feature method</li>
+      <li><span class="groovy">setupSpec()</span> before the first feature method</li>
+      <li><span class="groovy">cleanupSpec()</span> after the last feature method</li>
+    </ul>
+  </p>
+</section>
+
+<section class="slide">
+  <h2>Common variables are new for each test</h2>
+  <pre class="brush: groovy">
+class TestMocksRenewal extends Specification {
+
+  //Different for every test.
+  //Every test starts with counter 0.
+  def counter = 0
+  def Counter objectCounter = Mock()
+  </pre>
+  <h2>unless marked with @Shared</h2>
+  <pre class="brush: groovy">
+  @Shared
+  def sharedCounter = 0
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>Mock call matchers</h2>
+  <pre class="brush: groovy">
+dao.findByFirstname("Paweł")      //Specific argument
+dao.findByFirstname(_)            //Any argument
+dao.findByFirstname(_ as String)  //Any String
+dao.findByFirstname(!null)        //Non null
+dao.findByFirstname(!"Paweł")     //Everything that's
+                                  //not equal to "Paweł"
+dao.findByFirstname({it.length() > 3})  //Any argument which
+                                        //method length()
+                                        //result is greater than 3
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>Define mock return with closures</h2>
+  <pre class="brush: groovy">
+setup:
+def Dao dao = Mock()
+dao.persist(_) >> { it[0] }
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>Verify parameter passed to mock with closures</h2>
+  <pre class="brush: groovy">
+then:
+1 * dao.persist({ it.length() > 3 })
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>Parametrized methods</h2>
+  <pre class="brush: groovy">
+@Test
+@Unroll
+def 'isEven should return #isEven for #number'() {
+  when:
+  def result = service.isEven(number)
+
+  then:
+  result == isEven
+
+  where:
+  number  | isEven
+  2       | true
+  3       | false
+  65      | false
+}
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>Parametrization from external sources</h2>
+  <pre class="brush: groovy">
+@Test
+@Unroll
+def 'isEven should return #isEven for #number'() {
+  when:
+  def result = service.isEven(number)
+
+  then:
+  result == isEven
+
+  where:
+  number << getNumberValues()
+  isEven << getIsEvenValues()
+}
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>Nice error messages</h2>
+  <pre class="brush: groovy">
+then:
+parseDouble(bigDecimal.doubleValue().toString()) == 1
+  </pre>
+  <pre>
+Condition not satisfied:
+
+parseDouble(bigDecimal.doubleValue().toString()) == 1
+|           |          |             |           |
+100.0       100        100.0         100.0       false
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>also when comparing strings</h2>
+  <pre class="brush: groovy">
+def pineapple = "pineapple"
+
+then:
+pineapple == "pipe arrays"
+  </pre>
+  <pre>
+Condition not satisfied:
+
+pineapple == "pipe arrays"
+|         |
+pineapple false
+          7 differences (36% similarity)
+          pi(n)e(-)a(pple-)
+          pi(p)e( )a(rrays)
+  </pre>
+</section>
+
+
+<section class="slide">
+  <h2>Nice exceptions testing</h2>
+  <pre class="brush: groovy">
+  then:
+  Exception e = thrown()
+  e instanceof RuntimeException
+  e.message == "Could not run"
+  e.cause instanceof ArithmeticException
+  </pre>
+</section>
+
+<section class="slide">
+  <h2>@Timeout</h2>
+  <pre class="brush: groovy">
+  @Test
+  @Timeout(1) //In seconds
+  </pre>
+</section>
+
+<section class="slide">
+    <h2>There is more</h2>
+  <a href="http://code.google.com/p/spock/">http://code.google.com/p/spock/</a>
+</section>
+
+<section class="slide">
+  <h1 style="top: 30%;">Dziękuję!</h1>
+  <div style="top: 50%; position: absolute; text-align: center; left: 0; right: 0;">
+  <p><a href="https://github.com/amorfis/spock-pres">https://github.com/amorfis/spock-pres</a></p>
+  <p><a href="http://pawelstawicki.blogspot.com">http://pawelstawicki.blogspot.com</a></p>
+  <p>@pawelstawicki</p>
+  </div>
+</section>
+
+<section class="slide">
+    <h1 style="top: 30%;">Szczecin Java Users Group</h1>
+    <div style="top: 50%; position: absolute; text-align: center; left: 0; right: 0;">
+        <p><a href="http://szczecin.jug.pl">http://szczecin.jug.pl</a></p>
+        <p><a href="http://devcrowd.pl/">http://devcrowd.pl/</a></p>
+    </div>
+</section>
+
+
+<!-- deck.navigation snippet -->
+<a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+<a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+<!-- deck.status snippet -->
+<p class="deck-status">
+  <span class="deck-status-current"></span>
+  /
+  <span class="deck-status-total"></span>
+</p>
+
+<!-- deck.goto snippet -->
+<form action="presentation" method="get" class="goto-form">
+  <label for="goto-slide">Go to slide:</label>
+  <input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+  <datalist id="goto-datalist"></datalist>
+  <input type="submit" value="Go">
+</form>
+
+<!-- deck.hash snippet -->
+<a href="presentation" title="Permalink to this slide" class="deck-permalink">#</a>
+
+
+<!-- Grab CDN jQuery, with a protocol relative URL; fall back to local if offline -->
+<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script>window.jQuery || document.write('<script src="deck.js/jquery-1.7.min.js"><\/script>')</script>
+
+<!-- Deck Core and extensions -->
+<script src="deck.js/core/deck.core.js"></script>
+<script src="deck.js/extensions/hash/deck.hash.js"></script>
+<script src="deck.js/extensions/menu/deck.menu.js"></script>
+<script src="deck.js/extensions/goto/deck.goto.js"></script>
+<script src="deck.js/extensions/status/deck.status.js"></script>
+<script src="deck.js/extensions/navigation/deck.navigation.js"></script>
+<script src="deck.js/extensions/scale/deck.scale.js"></script>
+
+<!-- Initialize the deck -->
+<script>
+  $(function() {
+    $.deck('.slide');
+  });
+  SyntaxHighlighter.all()
+</script>
+
+</body>
+</html>
