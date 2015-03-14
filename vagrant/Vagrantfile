@@ -10,7 +10,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "pussinboots/ubuntu-truly"
+  config.vm.box = "ubuntu/trusty64"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.customize ["modifyvm", :id, "--ioapic", "on"]
+    vb.memory = "2048"
+    vb.cpus = "4"
+  end
 
   install_sbt = <<SCRIPT
     echo Installing sbt...
