@@ -98,7 +98,7 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
 
     def sendToRandomWorker(job: JobWithId, workers: Set[ActorSelection]) = {
       randomWorker(workers) ! job
-      context.system.scheduler.scheduleOnce(10 seconds, self, RetryJobIfNecessary(job))
+      context.system.scheduler.scheduleOnce(5 seconds, self, RetryJobIfNecessary(job))
     }
 
     def sendNextBatch(workers: Set[ActorSelection]): Unit = {
