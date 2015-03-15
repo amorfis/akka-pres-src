@@ -5,10 +5,9 @@ import akka.remote.RemoteScope
 import com.mkrcah.fractals._
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
-import pl.szjug.akka.Constants._
 import pl.szjug.akka.actors.ActorRenderer
 import pl.szjug.akka.c4.manyactors.ManyActorsMaster
-import pl.szjug.fractals.{JobToDivide, Job}
+import pl.szjug.fractals.JobToDivide
 
 object RunRemoteActors extends App with LazyLogging {
 
@@ -26,5 +25,5 @@ object RunRemoteActors extends App with LazyLogging {
   val imageSize = Size2i(600, 400)
   val master = system.actorOf(Props(classOf[ManyActorsMaster], imageSize, workers), "master")
 
-  master ! JobToDivide(imageSize, 10, 20, HuePalette, quality)
+  master ! JobToDivide(imageSize, 10, 20, HuePalette)
 }
