@@ -113,13 +113,14 @@
       <h3>Test functions</h3>
       <ul>
         <li>expectMsg[T](d: Duration, msg: T): T</li>
+        <li>expectMsgPF[T](d: Duration)(pf: PartialFunction[Any, T]): T</li>
         <li>expectMsgClass[T](d: Duration, c: Class[T]): T</li>
         <li>expectMsgType[T: Manifest](d: Duration)</li>
-        <li>expectMsgAnyOf[T](d: Duration, obj: T): T</li>
-        <li>expectMsgAnyClassOf[T](d: Duration, obj: Class[_ &lt;: T]): T</li>
-        <li>expectMsgAllOf[T](d: Duration, obj: T): Seq[T]</li>
-        <li>expectMsgAllClassOf[T](d: Duration, c: Class[_ &lt;: T]): Seq[T]</li>
-        <li>expectMsgAllConformingOf[T](d: Duration, c: Class[_ &lt;: T]): Seq[T]</li>
+        <li>expectMsgAnyOf[T](d: Duration, obj: T*): T</li>
+        <li>expectMsgAnyClassOf[T](d: Duration, obj: Class[_ &lt;: T]*): T</li>
+        <li>expectMsgAllOf[T](d: Duration, obj: T*): Seq[T]</li>
+        <li>expectMsgAllClassOf[T](d: Duration, c: Class[_ &lt;: T]*): Seq[T]</li>
+        <li>expectMsgAllConformingOf[T](d: Duration, c: Class[_ &lt;: T]*): Seq[T]</li>
         <li>expectNoMsg(d: Duration)</li>
         <li>receiveN(n: Int, d: Duration): Seq[AnyRef]</li>
         <li>fishForMessage(max: Duration, hint: String)(pf: PartialFunction[Any, Boolean]): Any</li>
