@@ -16,7 +16,7 @@ trait JobHandling {
         worker ! Job(size, region, palette)
       }
 
-    case JobToDivide(size, rows, cols, palette, quality) =>
+    case JobToDivide(size, rows, cols, palette) =>
       val regions = divideIntoParts(size, rows, cols)
       for (region <- regions) {
         workers(Random.nextInt(workers.size)) ! Job(size, region, palette)

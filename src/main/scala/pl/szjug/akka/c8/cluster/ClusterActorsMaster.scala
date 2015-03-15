@@ -40,7 +40,7 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
   }
 
   val acceptJob: Receive = {
-    case JobToDivide(size, rows, cols, pal, q) =>
+    case JobToDivide(size, rows, cols, pal) =>
       log.info("Accepting the job. Om nom nom....")
       val regions = divideIntoParts(size, rows, cols)
 
