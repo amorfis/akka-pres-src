@@ -1,16 +1,20 @@
 package pl.szjug.akka.c8.cluster
 
-import akka.actor.{PoisonPill, ActorSystem, Props}
-import com.mkrcah.fractals._
+import akka.actor.{ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
-import pl.szjug.akka.Constants._
 import pl.szjug.akka.actors.ActorRenderer
-import pl.szjug.fractals.Job
 
-object RunCluster extends App with LazyLogging {
+import pl.szjug.util.NetworkUtil
 
-  val config = ConfigFactory.parseString("akka.cluster.roles=[worker]")
+object RunClusterNode extends App with LazyLogging with NetworkUtil {
+
+  val localhost = getIpAddress()
+  val config = ConfigFactory.parseString(
+    s"""
+      |akka.cluster.roles=[worker]
+      |akka.remote.netty.tcp.hostname=$localhost
+    """.stripMargin)
     .withFallback(ConfigFactory.load("cluster-application.conf"))
   val system = ActorSystem("ClusterSystem", config)
 
