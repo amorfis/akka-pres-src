@@ -20,4 +20,3 @@ object SendJobToCluster extends App with LazyLogging {
   logger.info("Sending job to cluster master")
   masterActor ! JobToDivide(imageSize, 100, 100, palette)
 }
-

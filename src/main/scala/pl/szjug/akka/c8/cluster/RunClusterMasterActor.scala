@@ -1,14 +1,13 @@
 package pl.szjug.akka.c8.cluster
 
-import java.net.InetAddress
-
 import akka.actor.{ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
+import pl.szjug.util.NetworkUtil
 
-object RunClusterMasterActor extends App with LazyLogging {
+object RunClusterMasterActor extends App with LazyLogging with NetworkUtil {
 
-  val localhost = InetAddress.getLocalHost.getHostAddress
+  val localhost = getIpAddress()
   val config = ConfigFactory.parseString(
     s"""
        |akka.cluster.roles=[master]
