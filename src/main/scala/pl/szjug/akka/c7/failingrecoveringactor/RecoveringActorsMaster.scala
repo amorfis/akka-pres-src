@@ -1,26 +1,14 @@
 package pl.szjug.akka.c7.failingrecoveringactor
 
-import akka.actor.SupervisorStrategy.Restart
-import akka.actor.{ActorRef, OneForOneStrategy, Props}
+import akka.actor.ActorRef
 import com.mkrcah.fractals.Size2i
-import pl.szjug.akka.actors.{JobHandling, PaintingResultsActor, BrokenActorRenderer, RendererException}
+import pl.szjug.akka.actors.{JobHandling, PaintingResultsActor}
 
-import scala.concurrent.duration._
-import scala.util.Random
+class RecoveringActorsMaster(imgSize: Size2i, workersSupervisor: ActorRef)
+  extends PaintingResultsActor with JobHandling {
 
-class RecoveringActorsMaster(imgSize: Size2i) extends PaintingResultsActor with JobHandling {
+  override val receive = handleJob(Seq(workersSupervisor)) orElse paintResultPixels(imgSize)
 
-  val workers = for (i <- 1 to 100) yield context.actorOf(Props[BrokenActorRenderer])
-
-  override val receive = handleJob(workers) orElse paintResultPixels(imgSize)
-
-  override val supervisorStrategy =
-    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
-      case r: RendererException =>
-        workers(Random.nextInt(workers.size)) ! r.j
-        Restart
-      case t => super.supervisorStrategy.decider.apply(t)
-    }
 }
 
 

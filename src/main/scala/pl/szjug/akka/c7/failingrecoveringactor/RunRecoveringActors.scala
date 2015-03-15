@@ -1,16 +1,18 @@
 package pl.szjug.akka.c7.failingrecoveringactor
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor._
 import com.mkrcah.fractals._
 import com.typesafe.scalalogging.LazyLogging
 import pl.szjug.akka.Constants._
-import pl.szjug.fractals.{JobToDivide, Job}
+import pl.szjug.akka.c4.manyactors.ManyActorsMaster
+import pl.szjug.fractals.JobToDivide
 
 object RunRecoveringActors extends App with LazyLogging {
 
   val system = ActorSystem("actorSystem")
 
-  val master = system.actorOf(Props(new RecoveringActorsMaster(imageSize)), "master")
+  val workersSupervisor = system.actorOf(Props[WorkersSupervisor])
+  val master = system.actorOf(Props(new ManyActorsMaster(imageSize, Seq(workersSupervisor))), "master")
 
-  master ! Job(imageSize, Region2i(imageSize), HuePalette)
+  master ! JobToDivide(imageSize, 10, 20, HuePalette)
 }
