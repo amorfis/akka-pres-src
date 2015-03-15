@@ -96,6 +96,43 @@
     </section>
 
     <section class="slide">
+      <h3>Routers</h3>
+      <ul>
+        <li>RoundRobinPool/Group</li>
+        <li>Random/Group</li>
+        <li>BalancingPool</li>
+        <li>SmallestMailboxPool</li>
+        <li>BroadcastPool/Group</li>
+        <li>ScatterGatherFirstCompletedPool/Group</li>
+        <li>TailChoppingPool/Group</li>
+        <li>ConsistentHashingPool/Group</li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h3>Test functions</h3>
+      <ul>
+        <li>expectMsg[T](d: Duration, msg: T): T</li>
+        <li>expectMsgClass[T](d: Duration, c: Class[T]): T</li>
+        <li>expectMsgType[T: Manifest](d: Duration)</li>
+        <li>expectMsgAnyOf[T](d: Duration, obj: T): T</li>
+        <li>expectMsgAnyClassOf[T](d: Duration, obj: Class[_ &lt;: T]): T</li>
+        <li>expectMsgAllOf[T](d: Duration, obj: T): Seq[T]</li>
+        <li>expectMsgAllClassOf[T](d: Duration, c: Class[_ &lt;: T]): Seq[T]</li>
+        <li>expectMsgAllConformingOf[T](d: Duration, c: Class[_ &lt;: T]): Seq[T]</li>
+        <li>expectNoMsg(d: Duration)</li>
+        <li>receiveN(n: Int, d: Duration): Seq[AnyRef]</li>
+        <li>fishForMessage(max: Duration, hint: String)(pf: PartialFunction[Any, Boolean]): Any</li>
+        <li>receiveOne(d: Duration): AnyRef</li>
+        <li>receiveWhile[T](max: Duration, idle: Duration, messages: Int)(pf: PartialFunction[Any, T]): Seq[T]</li>
+        <li>awaitCond(p:=> Boolean, max: Duration, interval: Duration)</li>
+        <li>awaitAssert(a: => Any, max: Duration, interval: Duration)</li>
+        <li>ignoreMsg(pf: PartialFunction[AnyRef, Boolean])</li>
+        <li>ignoreNoMsg</li>
+      </ul>
+    </section>
+
+    <section class="slide">
       <div class="vcenter">
         <h1>Thanks!</h1>
         <p><a href="https://github.com/amorfis/akka-pres">https://github.com/amorfis/akka-pres</a></p>
