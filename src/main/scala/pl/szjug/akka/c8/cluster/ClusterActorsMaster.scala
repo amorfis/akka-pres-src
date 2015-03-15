@@ -79,7 +79,6 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
       workers = workers - actorSelection(member.address)
     case MemberRemoved(member, previousStatus) if member.hasRole("worker") =>
       log.info("Worker is Removed: {} after {}", member.address, previousStatus)
-    case me: MemberEvent => log.info(s"IGNORED MEMBER EVENT: $me")
   }
 
   val receive = handleClusterMembers
