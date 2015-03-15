@@ -15,7 +15,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 object RunLocalActors extends App with LazyLogging {
 
   val imageSize = Size2i(80, 40)
-  val remoteHost = ConfigFactory.load("remote-on-virtual.conf").getString("remote.netty.tcp.hostname")
+  val remoteHost = ConfigFactory.load("hosts.conf").getString("remote.host")
   val config = ConfigFactory.load("remote-host.conf")
 
   val system = ActorSystem("actorSystem", config)

@@ -6,7 +6,7 @@ import pl.szjug.akka.actors.ActorRenderer
 
 object RunActorSystemOnRemote extends App {
 
-  val config = ConfigFactory.load("remote-single-application-virtual.conf")
+  val config = ConfigFactory.load("system-on-remote.conf")
   val system = ActorSystem("remoteActorSystem", config)
 
   system.actorOf(Props[ActorRenderer], "remoteRenderer")
