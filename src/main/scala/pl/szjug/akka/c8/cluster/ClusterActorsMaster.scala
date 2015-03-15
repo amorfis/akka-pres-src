@@ -13,7 +13,7 @@ import scala.util.Random
 
 class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
 
-  val MinWorkers = 2
+  val MinWorkers = 4
 
   val cluster = Cluster(context.system)
 
