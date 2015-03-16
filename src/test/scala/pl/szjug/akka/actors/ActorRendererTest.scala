@@ -30,8 +30,7 @@ class ActorRendererTest extends TestKit(ActorSystem())
           (Point2i(0, 0), ColorRGB(65280, 1536, 0)),
           (Point2i(1, 0), ColorRGB(65280, 33792, 0)),
           (Point2i(0, 1), ColorRGB(50688, 65280, 0)),
-          (Point2i(1, 1), ColorRGB(65280, 50688, 0))),
-        Region2i(Point2i(0, 0), Point2i(1, 1)))
+          (Point2i(1, 1), ColorRGB(65280, 50688, 0))))
       expectMsg(expectedResult)
     }
   }

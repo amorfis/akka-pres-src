@@ -23,7 +23,7 @@ class ActorRenderer extends Actor with ActorLogging {
       val renderer = new JuliaRenderer(j.toJob)
       // Actor is blocked here
       val pixels = renderer.render()
-      sender ! ResultWithId(j.id, pixels.pixels, pixels.imgPart)
+      sender ! ResultWithId(j.id, pixels.pixels)
   }
 }
 
