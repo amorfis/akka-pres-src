@@ -1,7 +1,7 @@
 package pl.szjug.akka.c10.manyactors
 
 import akka.actor.{Props, Terminated, ActorRef, ActorSelection}
-import akka.routing.{ActorRefRoutee, Router, RoundRobinRoutingLogic}
+import akka.routing._
 import com.mkrcah.fractals.{Palette, Size2i}
 import pl.szjug.akka.actors.{ActorRenderer, JobHandling, PaintingResultsActor}
 import pl.szjug.fractals.{JobToDivide, JobWithId, Job}
@@ -18,17 +18,19 @@ class RoutersActorsMaster extends PaintingResultsActor with JobHandling {
     }
 
     router = Router(RoundRobinRoutingLogic(), routees)
+//    router = Router(RandomRoutingLogic(), routees)
+//    router = Router(SmallestMailboxRoutingLogic(), routees)
   }
 
   val Rows = 15
   val Columns = 40
 
-  val handleJob: Receive = {
+  override val receive: Receive = {
     def handleJob(size: Size2i, rows: Int, columns: Int, palette: Palette) = {
       val jobs = divideIntoParts(size, rows, columns) map (Job(size, _, palette))
       createRouter(Rows * Columns)
       jobs.foreach(router.route(_, self))
-      context become paintResultPixels(size)
+      context become (receive orElse paintResultPixels(size))
     }
 
     {
@@ -45,7 +47,4 @@ class RoutersActorsMaster extends PaintingResultsActor with JobHandling {
         router = router.addRoutee(r)
     }
   }
-
-  override val receive: Receive = handleJob
-
 }
