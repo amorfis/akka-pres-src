@@ -11,7 +11,7 @@ case class ImgFrame(img: BufferedImage) {
 
   f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
   f.getContentPane.add(panel)
-  f.setSize(1200, 800)
+  f.setSize(800, 600)
   f.setVisible(true)
 
   def repaint(): Unit = {
