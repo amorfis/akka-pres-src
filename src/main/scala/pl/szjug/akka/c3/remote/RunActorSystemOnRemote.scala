@@ -10,5 +10,4 @@ object RunActorSystemOnRemote extends App {
   val system = ActorSystem("remoteActorSystem", config)
 
   system.actorOf(Props[ActorRenderer], "remoteRenderer")
-
 }

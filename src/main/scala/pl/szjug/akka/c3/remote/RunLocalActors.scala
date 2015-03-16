@@ -11,12 +11,13 @@ import pl.szjug.akka.c2.simpleactor.SimpleActorMaster
 import pl.szjug.fractals.Job
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success}
 
 object RunLocalActors extends App with LazyLogging {
 
   val imageSize = Size2i(80, 40)
   val remoteHost = ConfigFactory.load("hosts.conf").getString("remote.host")
-  val config = ConfigFactory.load("remote-host.conf")
+  val config = ConfigFactory.load("remote-actor-refs.conf")
 
   val system = ActorSystem("actorSystem", config)
 
@@ -26,15 +27,13 @@ object RunLocalActors extends App with LazyLogging {
 
   implicit val timeout: Timeout = 3 seconds
 
-  val f = remoteRenderer ? Identify(0)
+  val future = remoteRenderer ? Identify(0)
 
-  f.onSuccess({
-    case ActorIdentity(_, Some(ref)) =>
-
+  future.onComplete({
+    case Success(ActorIdentity(_, Some(ref))) =>
       val master = system.actorOf(Props(classOf[SimpleActorMaster], imageSize, ref))
       master ! Job(imageSize, Region2i(imageSize), palette)
-  })
-  f.onFailure({
-    case e: Exception => logger.error("Could not get remote actor ActorRef", e)
+
+    case Failure(e) => logger.error("Could not get remote actor ActorRef", e)
   })
 }
