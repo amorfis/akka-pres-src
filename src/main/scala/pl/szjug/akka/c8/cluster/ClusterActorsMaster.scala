@@ -39,13 +39,25 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
     }
   }
 
+  val handleClusterMembers: Receive = {
+    case MemberUp(member) if member.hasRole("worker") =>
+      log.info(s"Worker ${member.address} added to cluster")
+      workers = workers + actorSelection(member.address)
+      newWorkerAdded()
+    case UnreachableMember(member) if member.hasRole("worker") =>
+      log.info("Worker detected as unreachable: {}", member)
+      workers = workers - actorSelection(member.address)
+    case MemberRemoved(member, previousStatus) if member.hasRole("worker") =>
+      log.info("Worker is Removed: {} after {}", member.address, previousStatus)
+  }
+
   val acceptJob: Receive = {
     case JobToDivide(size, rows, cols, pal) =>
       log.info("Accepting the job. Om nom nom....")
       val regions = divideIntoParts(size, rows, cols)
 
       val jobsForWorkers = regions.zipWithIndex.map({
-        case (r, n) => JobWithId(n, size, r, pal)
+        case (r, n) => JobWithId(idStartForJobs + n, size, r, pal)
       })
       workersJobsHandler = new WorkersJobsHandler(jobsForWorkers)
       workersJobsHandler.sendNextBatch(workers)
@@ -67,18 +79,6 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
 
   def actorSelection(address: Address) = {
     context.actorSelection(RootActorPath(address) / "user" / "worker")
-  }
-
-  val handleClusterMembers: Receive = {
-    case MemberUp(member) if member.hasRole("worker") =>
-      log.info(s"Worker ${member.address} added to cluster")
-      workers = workers + actorSelection(member.address)
-      newWorkerAdded()
-    case UnreachableMember(member) if member.hasRole("worker") =>
-      log.info("Worker detected as unreachable: {}", member)
-      workers = workers - actorSelection(member.address)
-    case MemberRemoved(member, previousStatus) if member.hasRole("worker") =>
-      log.info("Worker is Removed: {} after {}", member.address, previousStatus)
   }
 
   val receive = handleClusterMembers
