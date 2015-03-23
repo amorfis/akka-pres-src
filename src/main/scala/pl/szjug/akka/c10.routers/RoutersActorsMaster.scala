@@ -17,9 +17,9 @@ class RoutersActorsMaster extends PaintingResultsActor with JobHandling {
       ActorRefRoutee(r)
     }
 
-    router = Router(RoundRobinRoutingLogic(), routees)
+//    router = Router(RoundRobinRoutingLogic(), routees)
 //    router = Router(RandomRoutingLogic(), routees)
-//    router = Router(SmallestMailboxRoutingLogic(), routees)
+    router = Router(SmallestMailboxRoutingLogic(), routees)
   }
 
   val Rows = 15
