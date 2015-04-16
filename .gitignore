@@ -3,3 +3,4 @@ target
 **/.vagrant
 **/.DS_Store
 **/node_modules
+slides
