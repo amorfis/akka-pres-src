@@ -12,13 +12,17 @@ import akka.actor.{ActorRef, Props, ActorSystem}
 import akka.testkit._
 
 class ActorRendererTest extends TestKit(ActorSystem())
-  with DefaultTimeout with ImplicitSender
-  with WordSpecLike with Matchers {
+  with DefaultTimeout
+  with ImplicitSender
+  with WordSpecLike
+  with Matchers {
 
   "ActorRenderer" should {
     "Respond with the same message it receives" in {
       // Given
       val actorRenderer = TestActorRef(Props[ActorRenderer])
+      println(actorRenderer.underlyingActor.getClass)
+
       val size = Size2i(2, 2)
 
       // When
