@@ -11,7 +11,7 @@ class RoutersActorsMaster extends PaintingResultsActor with JobHandling {
   var router: Router = null
 
   def createRouter(count: Int) = {
-    val routees = Vector.fill(Rows * Columns) {
+    val routees = Vector.fill(count) {
       val r = context.actorOf(Props[ActorRenderer])
       context watch r
       ActorRefRoutee(r)
