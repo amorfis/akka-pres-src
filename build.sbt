@@ -16,6 +16,7 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-core" % "1.1.2",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
   "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
+  "com.typesafe.akka" %% "akka-contrib" % akkaVersion,
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 )
