@@ -31,15 +31,9 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
 
   override def postStop(): Unit = cluster.unsubscribe(self)
 
-  var newWorkerAdded: () => Unit = { () =>
-    if (workers.size >= MinWorkers) {
-      log.info("Has enough workers. Accepting job")
-      context become (handleClusterMembers orElse acceptJob)
-      newWorkerAdded = () => {}
-    }
-  }
+  val receive = handleClusterMembers
 
-  val handleClusterMembers: Receive = {
+  lazy val handleClusterMembers: Receive = {
     case MemberUp(member) if member.hasRole("worker") =>
       log.info(s"Worker ${member.address} added to cluster")
       workers = workers + actorSelection(member.address)
@@ -51,7 +45,15 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
       log.info("Worker is Removed: {} after {}", member.address, previousStatus)
   }
 
-  val acceptJob: Receive = {
+  var newWorkerAdded: () => Unit = { () =>
+    if (workers.size >= MinWorkers) {
+      log.info("Has enough workers. Accepting job")
+      context become (handleClusterMembers orElse acceptJob)
+      newWorkerAdded = () => {}
+    }
+  }
+
+  lazy val acceptJob: Receive = {
     case JobToDivide(size, rows, cols, pal) =>
       log.info("Accepting the job. Om nom nom....")
       val regions = divideIntoParts(size, rows, cols)
@@ -81,15 +83,13 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
     context.actorSelection(RootActorPath(address) / "user" / "worker")
   }
 
-  val receive = handleClusterMembers
-
   class WorkersJobsHandler(private var jobs: Seq[JobWithId]) {
 
     var jobsSentToWorkers = 0
     var resultsReceived = Set[Long]()
 
     def randomWorker(workers: Set[ActorSelection]) = {
-      if (workers.size == 0) {
+      if (workers.isEmpty) {
         log.error("Oops, no workers. Let it crash!")
         throw new RuntimeException("No workers to do my job :(")
       }
@@ -98,7 +98,7 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
 
     def sendToRandomWorker(job: JobWithId, workers: Set[ActorSelection]) = {
       randomWorker(workers) ! job
-      context.system.scheduler.scheduleOnce(5 seconds, self, RetryJobIfNecessary(job))
+      context.system.scheduler.scheduleOnce(10 seconds, self, RetryJobIfNecessary(job))
     }
 
     def sendNextBatch(workers: Set[ActorSelection]): Unit = {
