@@ -23,8 +23,8 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
      cluster.subscribe(
        self,
        initialStateMode = InitialStateAsEvents,
-       classOf[MemberEvent],
-       classOf[UnreachableMember])
+       classOf[MemberEvent])
+//       classOf[UnreachableMember])
    }
 
    override def postStop(): Unit = cluster.unsubscribe(self)
@@ -35,11 +35,11 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
     case MemberUp(member) if member.hasRole("worker") =>
       log.info(s"Worker ${member.address} added to cluster")
       workers = workers + actorSelection(member.address)
-    case UnreachableMember(member) if member.hasRole("worker") =>
-      log.info("Worker detected as unreachable: {}", member)
-      workers = workers - actorSelection(member.address)
+//    case UnreachableMember(member) if member.hasRole("worker") =>
+//      log.info("Worker detected as unreachable: {}", member)
     case MemberRemoved(member, previousStatus) if member.hasRole("worker") =>
       log.info("Worker is Removed: {} after {}", member.address, previousStatus)
+      workers = workers - actorSelection(member.address)
   }
 
    lazy val acceptJob: Receive = {
