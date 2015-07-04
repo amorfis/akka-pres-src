@@ -8,6 +8,7 @@ import pl.szjug.util.NetworkUtil
 object RunClusterNode extends App with LazyLogging with NetworkUtil {
 
   val localhost = getIpAddress()
+//      |akka.cluster.roles=[worker]
   val config = ConfigFactory.parseString(
     s"""
       |akka.remote.netty.tcp.hostname=$localhost
