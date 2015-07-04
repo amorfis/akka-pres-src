@@ -1,4 +1,4 @@
-package pl.szjug.akka.c10.manyactors
+package pl.szjug.akka.c10.routers
 
 import akka.actor.{Props, Terminated}
 import akka.routing._
@@ -28,7 +28,7 @@ class RoutersActorsMaster extends PaintingResultsActor with JobHandling {
   override val receive: Receive = {
     def handleJob(size: Size2i, rows: Int, columns: Int, palette: Palette) = {
       val jobs = divideIntoParts(size, rows, columns) map (Job(size, _, palette))
-      createRouter(Rows * Columns)
+      createRouter(Columns)
       jobs.foreach(router.route(_, self))
       context become (receive orElse paintResultPixels(size))
     }
