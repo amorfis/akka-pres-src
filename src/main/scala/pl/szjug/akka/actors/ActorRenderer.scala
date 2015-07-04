@@ -5,11 +5,6 @@ import pl.szjug.fractals.{ResultWithId, JobWithId, Job, JuliaRenderer}
 
 class ActorRenderer extends Actor with ActorLogging {
 
-  override def preStart() = {
-    super.preStart()
-    log.debug("Starting ActorRenderer")
-  }
-
   override def receive = {
     case j: Job =>
       log.info("Job received")
