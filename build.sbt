@@ -24,3 +24,5 @@ addCommandAlias("runRemote", "run-main pl.szjug.akka.c3.remote.RunActorSystemOnR
 addCommandAlias("runClusterNode", "run-main pl.szjug.akka.c8.cluster.RunClusterNode")
 addCommandAlias("runWorkerInCluster", "run-main pl.szjug.akka.c8.cluster.RunWorkerInCluster")
 addCommandAlias("runClusterNodeWithMin", "run-main pl.szjug.akka.c9.clusterwithminroles.RunClusterNodeWithMin")
+
+addCommandAlias("runManyActors", "run-main pl.szjug.akka.c4.manyactors.RunManyActors")
