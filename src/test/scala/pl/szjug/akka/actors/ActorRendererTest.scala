@@ -4,7 +4,6 @@ import akka.testkit.TestActor.AutoPilot
 import com.mkrcah.fractals._
 import pl.szjug.akka.c4.manyactors.ManyActorsMaster
 import pl.szjug.fractals.{Result, Job}
-import scala.concurrent.duration._
 
 import org.scalatest.{WordSpecLike, Matchers}
 

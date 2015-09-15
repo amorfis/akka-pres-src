@@ -7,7 +7,7 @@ version := "1.0"
 scalaVersion := "2.11.6"
 
 val akkaVersion = "2.3.11"
-val kamonVersion = "0.3.4"
+val kamonVersion = "0.4.0"
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
@@ -22,9 +22,10 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
   "org.scalatest" %% "scalatest" % "2.2.4" % "test",
 
-  "io.kamon" %% "kamon-core" % kamonVersion,
-//  "io.kamon" %% "kamon-akka" % kamonVersion,
-//  "io.kamon" %% "kamon-akka-remote" % kamonVersion,
+//  "io.kamon" %% "kamon-core" % kamonVersion,
+  "io.kamon" %% "kamon-scala" % kamonVersion,
+  "io.kamon" %% "kamon-akka" % kamonVersion,
+  "io.kamon" %% "kamon-akka-remote" % kamonVersion,
   "io.kamon" %% "kamon-statsd" % kamonVersion,
   "io.kamon" %% "kamon-log-reporter" % kamonVersion,
   "io.kamon" %% "kamon-system-metrics" % kamonVersion,
@@ -44,6 +45,7 @@ aspectjSettings
 // Here we are effectively adding the `-javaagent` JVM startup
 // option with the location of the AspectJ Weaver provided by
 // the sbt-aspectj plugin.
+javaOptions += "-Djava.library.path=/Users/amorfis/idea-workspace/prezentacje/akka-pres/native"
 javaOptions <++= AspectjKeys.weaverOptions in Aspectj
 
 // We need to ensure that the JVM is forked for the
