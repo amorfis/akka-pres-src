@@ -4,7 +4,7 @@ import akka.actor._
 import akka.contrib.pattern.ShardRegion
 import pl.szjug.akka.c11.clustersharding.StatefulActor.{GetWordCount, IncWordCount}
 
-class StatefulActor(val persistenceId: String) extends Actor with ActorLogging {
+class StatefulActor() extends Actor with ActorLogging {
 
   var words = Map[String, Int]()
 
@@ -13,13 +13,13 @@ class StatefulActor(val persistenceId: String) extends Actor with ActorLogging {
   }
 
   override def receive: Receive = {
-    case s@IncWordCount(_, word) =>
+    case s@IncWordCount(word) =>
       log.info(s"Got IncWordCount command, $self")
 //      persist(s) { s =>
         val count = words.getOrElse(word, 0)
         words += (word -> (count + 1))
 //      }
-    case GetWordCount(_, word) => words.getOrElse(word, 0)
+    case GetWordCount(word) => words.getOrElse(word, 0)
   }
 
 //  override def receiveRecover = receiveCommand
@@ -28,20 +28,20 @@ class StatefulActor(val persistenceId: String) extends Actor with ActorLogging {
 object StatefulActor {
 
   sealed trait WordMessage {
-    val id: String
+//    val id: String
     val word: String
   }
 
-  case class IncWordCount(id: String, word: String) extends WordMessage
+  case class IncWordCount(word: String) extends WordMessage
 
-  case class GetWordCount(id: String, word: String) extends WordMessage
+  case class GetWordCount(word: String) extends WordMessage
 
   val idExtractor: ShardRegion.IdExtractor = {
-    case wm: WordMessage => (wm.id, wm)
+    case wm: WordMessage => ((Math.abs(wm.word.hashCode) % 10).toString, wm)
   }
 
   val shardRegionResolver: ShardRegion.ShardResolver = {
-    case wm: WordMessage => (Math.abs(wm.id.hashCode) % 2).toString
+    case wm: WordMessage =>(Math.abs(wm.word.hashCode) % 3).toString
   }
 
 }

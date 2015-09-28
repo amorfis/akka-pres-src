@@ -22,14 +22,12 @@ object RunClusterNodes extends App with LazyLogging with NetworkUtil {
 
   val system1 = runActorSystem(2552)
   val system2 = runActorSystem(2553)
-  val system3 = runActorSystem(0)
-
-  implicit val executionContext = system1.dispatcher
+  val system3 = runActorSystem(2661)
 
   // Create sharded actor on system1
-  ClusterSharding(system1).start("wordCounter", Some(Props(classOf[StatefulActor], "per1")), StatefulActor.idExtractor, StatefulActor.shardRegionResolver)
-  ClusterSharding(system2).start("wordCounter", Some(Props(classOf[StatefulActor], "per2")), StatefulActor.idExtractor, StatefulActor.shardRegionResolver)
-  ClusterSharding(system3).start("wordCounter", Some(Props(classOf[StatefulActor], "per3")), StatefulActor.idExtractor, StatefulActor.shardRegionResolver)
+  ClusterSharding(system1).start("wordCounter", Some(Props(classOf[StatefulActor])), StatefulActor.idExtractor, StatefulActor.shardRegionResolver)
+  ClusterSharding(system2).start("wordCounter", Some(Props(classOf[StatefulActor])), StatefulActor.idExtractor, StatefulActor.shardRegionResolver)
+  ClusterSharding(system3).start("wordCounter", Some(Props(classOf[StatefulActor])), StatefulActor.idExtractor, StatefulActor.shardRegionResolver)
 
   val shardedActor = ClusterSharding(system1).shardRegion("wordCounter")
 
@@ -38,7 +36,7 @@ object RunClusterNodes extends App with LazyLogging with NetworkUtil {
   println("Sending many messages")
 
   for(i <- 1 to 100) {
-    shardedActor ! IncWordCount(Random.nextInt(10).toString, "dupa")
+    shardedActor ! IncWordCount(Random.nextString(32))
   }
 
 //  import scala.concurrent.duration._
