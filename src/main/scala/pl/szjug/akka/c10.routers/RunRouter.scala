@@ -1,10 +1,8 @@
-package pl.szjug.akka.c10.manyactors
+package pl.szjug.akka.c10.routers
 
 import akka.actor.{ActorRef, ActorSystem, Props}
-import com.mkrcah.fractals._
 import com.typesafe.scalalogging.LazyLogging
 import pl.szjug.fractals.{JobToDivide, Job}
-import pl.szjug.akka.actors.ActorRenderer
 import pl.szjug.akka.Constants._
 
 object RunRouter extends App with LazyLogging {

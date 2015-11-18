@@ -1,4 +1,4 @@
-package pl.szjug.akka.c10.manyactors
+package pl.szjug.akka.c10.routers
 
 import akka.actor.{Props, Terminated, ActorRef, ActorSelection}
 import akka.routing._
