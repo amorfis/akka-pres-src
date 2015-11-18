@@ -2,9 +2,9 @@ name := "akka-pres"
 
 version := "1.0"
 
-scalaVersion := "2.11.5"
+scalaVersion := "2.11.7"
 
-val akkaVersion = "2.3.11"
+val akkaVersion = "2.4.0"
 
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % akkaVersion,
@@ -16,7 +16,9 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-core" % "1.1.2",
   "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
   "com.typesafe.akka" %% "akka-cluster" % akkaVersion,
+  "com.typesafe.akka" %% "akka-cluster-sharding" % akkaVersion,
   "com.typesafe.akka" %% "akka-contrib" % akkaVersion,
+  "org.iq80.leveldb" % "leveldb" % "0.7",
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 )
