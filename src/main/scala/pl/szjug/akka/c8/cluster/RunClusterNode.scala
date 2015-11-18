@@ -12,12 +12,11 @@ object RunClusterNode extends App with LazyLogging with NetworkUtil {
   val localhost = getIpAddress()
   val config = ConfigFactory.parseString(
     s"""
-      |akka.cluster.roles=[worker]
       |akka.remote.netty.tcp.hostname=$localhost
     """.stripMargin)
     .withFallback(ConfigFactory.load("cluster-application.conf"))
   val system = ActorSystem("ClusterSystem", config)
 
-  val worker = system.actorOf(Props[ActorRenderer], "worker")
+//  val worker = system.actorOf(Props[ActorRenderer], "worker")
 }
 
