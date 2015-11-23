@@ -9,7 +9,7 @@ import akka.persistence.journal.leveldb.{SharedLeveldbJournal, SharedLeveldbStor
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
 import pl.szjug.akka.Constants
-import pl.szjug.akka.Constants.{palette, imageSize}
+import pl.szjug.akka.Constants.{Palette, ImageSize}
 import pl.szjug.akka.actors.ActorRenderer
 import pl.szjug.fractals.{Job, JobToDivide}
 
@@ -66,5 +66,5 @@ object RunClusterShards extends App with LazyLogging {
 
   val master = system2.actorOf(Props[ClusterShardingActorsMaster])
 
-  master ! JobToDivide(imageSize, 100, 20, palette)
+  master ! JobToDivide(ImageSize, 100, 20, Palette)
 }

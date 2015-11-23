@@ -32,7 +32,7 @@ object RunLocalActors extends App with LazyLogging {
   future.onComplete({
     case Success(ActorIdentity(_, Some(ref))) =>
       val master = system.actorOf(Props(classOf[SimpleActorMaster], imageSize, ref))
-      master ! Job(imageSize, Region2i(imageSize), palette)
+      master ! Job(imageSize, Region2i(imageSize), Palette)
 
     case Failure(e) => logger.error("Could not get remote actor ActorRef", e)
   })

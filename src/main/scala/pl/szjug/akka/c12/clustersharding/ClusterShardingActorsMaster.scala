@@ -10,5 +10,5 @@ class ClusterShardingActorsMaster extends PaintingResultsActor with JobHandling 
 
   val handleJobs = handleJob(Seq(sharded))
 
-  override val receive: Receive = handleJobs orElse paintResultPixels(imageSize)
+  override val receive: Receive = handleJobs orElse paintResultPixels(ImageSize)
 }

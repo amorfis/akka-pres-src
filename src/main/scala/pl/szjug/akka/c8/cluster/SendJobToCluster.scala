@@ -18,5 +18,5 @@ object SendJobToCluster extends App with LazyLogging {
   val masterActor = system.actorSelection(s"akka.tcp://ClusterSystem@$clusterMasterHost:6666/user/master")
 
   logger.info("Sending job to cluster master")
-  masterActor ! JobToDivide(imageSize, 100, 100, palette)
+  masterActor ! JobToDivide(imageSize, 100, 100, Palette)
 }

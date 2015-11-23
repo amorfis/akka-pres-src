@@ -13,7 +13,7 @@ object RunRecoveringActors extends App with LazyLogging {
 
   val workersSupervisor = system.actorOf(Props[WorkersSupervisor])
   val master = system.actorOf(Props(
-    new ManyActorsMaster(imageSize, Seq(workersSupervisor))), "master")
+    new ManyActorsMaster(ImageSize, Seq(workersSupervisor))), "master")
 
-  master ! JobToDivide(imageSize, 10, 20, HuePalette)
+  master ! JobToDivide(ImageSize, 10, 20, HuePalette)
 }

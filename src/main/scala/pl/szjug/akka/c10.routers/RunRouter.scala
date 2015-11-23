@@ -11,5 +11,5 @@ object RunRouter extends App with LazyLogging {
 
   val master = system.actorOf(Props[RoutersActorsMaster], "master")
 
-  master ! JobToDivide(imageSize, 100, 200, palette)
+  master ! JobToDivide(ImageSize, 100, 200, Palette)
 }
