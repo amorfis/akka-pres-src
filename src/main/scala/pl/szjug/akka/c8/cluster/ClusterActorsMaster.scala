@@ -25,11 +25,25 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
     cluster.subscribe(
       self,
       initialStateMode = InitialStateAsEvents,
-      classOf[MemberEvent],
-      classOf[UnreachableMember])
+      classOf[MemberEvent])
+//      classOf[UnreachableMember])
   }
 
   override def postStop(): Unit = cluster.unsubscribe(self)
+
+  val receive = handleClusterMembers
+
+  lazy val handleClusterMembers: Receive = {
+    case MemberUp(member) if member.hasRole("worker") =>
+      log.info(s"Worker ${member.address} added to cluster")
+      workers = workers + actorSelection(member.address)
+      newWorkerAdded()
+//    case UnreachableMember(member) if member.hasRole("worker") =>
+//      log.info("Worker detected as unreachable: {}", member)
+    case MemberRemoved(member, previousStatus) if member.hasRole("worker") =>
+      log.info("Worker is Removed: {} after {}", member.address, previousStatus)
+      workers = workers - actorSelection(member.address)
+  }
 
   var newWorkerAdded: () => Unit = { () =>
     if (workers.size >= MinWorkers) {
@@ -39,19 +53,7 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
     }
   }
 
-  val handleClusterMembers: Receive = {
-    case MemberUp(member) if member.hasRole("worker") =>
-      log.info(s"Worker ${member.address} added to cluster")
-      workers = workers + actorSelection(member.address)
-      newWorkerAdded()
-    case UnreachableMember(member) if member.hasRole("worker") =>
-      log.info("Worker detected as unreachable: {}", member)
-      workers = workers - actorSelection(member.address)
-    case MemberRemoved(member, previousStatus) if member.hasRole("worker") =>
-      log.info("Worker is Removed: {} after {}", member.address, previousStatus)
-  }
-
-  val acceptJob: Receive = {
+  lazy val acceptJob: Receive = {
     case JobToDivide(size, rows, cols, pal) =>
       log.info("Accepting the job. Om nom nom....")
       val regions = divideIntoParts(size, rows, cols)
@@ -81,15 +83,13 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
     context.actorSelection(RootActorPath(address) / "user" / "worker")
   }
 
-  val receive = handleClusterMembers
-
   class WorkersJobsHandler(private var jobs: Seq[JobWithId]) {
 
     var jobsSentToWorkers = 0
     var resultsReceived = Set[Long]()
 
     def randomWorker(workers: Set[ActorSelection]) = {
-      if (workers.size == 0) {
+      if (workers.isEmpty) {
         log.error("Oops, no workers. Let it crash!")
         throw new RuntimeException("No workers to do my job :(")
       }
@@ -97,8 +97,10 @@ class ClusterActorsMaster extends PaintingResultsActor with JobHandling {
     }
 
     def sendToRandomWorker(job: JobWithId, workers: Set[ActorSelection]) = {
-      randomWorker(workers) ! job
-      context.system.scheduler.scheduleOnce(5 seconds, self, RetryJobIfNecessary(job))
+      val worker = randomWorker(workers)
+      log.info(s"Sending job to ${worker}")
+      worker ! job
+      context.system.scheduler.scheduleOnce(10 seconds, self, RetryJobIfNecessary(job))
     }
 
     def sendNextBatch(workers: Set[ActorSelection]): Unit = {

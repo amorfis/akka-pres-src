@@ -1,10 +1,8 @@
 package pl.szjug.akka.c8.cluster
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.ActorSystem
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
-import pl.szjug.akka.actors.ActorRenderer
-
 import pl.szjug.util.NetworkUtil
 
 object RunClusterNode extends App with LazyLogging with NetworkUtil {
@@ -16,7 +14,5 @@ object RunClusterNode extends App with LazyLogging with NetworkUtil {
     """.stripMargin)
     .withFallback(ConfigFactory.load("cluster-application.conf"))
   val system = ActorSystem("ClusterSystem", config)
-
-//  val worker = system.actorOf(Props[ActorRenderer], "worker")
 }
 

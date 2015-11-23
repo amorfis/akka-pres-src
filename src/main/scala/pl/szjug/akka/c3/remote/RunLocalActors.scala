@@ -17,15 +17,12 @@ object RunLocalActors extends App with LazyLogging {
 
   val imageSize = Size2i(80, 40)
   val remoteHost = ConfigFactory.load("hosts.conf").getString("remote.host")
-  val config = ConfigFactory.load("remote-actor-refs.conf")
+  implicit val timeout: Timeout = 3 seconds
 
+  val config = ConfigFactory.load("remote-actor-refs.conf")
   val system = ActorSystem("actorSystem", config)
 
-  logger.info("Created local ActorSystem. Connecting to remote actors.")
-
   val remoteRenderer = system.actorSelection(s"akka.tcp://remoteActorSystem@$remoteHost:2552/user/remoteRenderer")
-
-  implicit val timeout: Timeout = 3 seconds
 
   val future = remoteRenderer ? Identify(0)
 

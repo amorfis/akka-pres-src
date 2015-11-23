@@ -22,3 +22,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-testkit" % akkaVersion,
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 )
+
+addCommandAlias("runRemote", "run-main pl.szjug.akka.c3.remote.RunActorSystemOnRemote")
+addCommandAlias("runClusterNode", "run-main pl.szjug.akka.c8.cluster.RunClusterNode")
+addCommandAlias("runWorkerInCluster", "run-main pl.szjug.akka.c8.cluster.RunWorkerInCluster")
+addCommandAlias("runClusterNodeWithMin", "run-main pl.szjug.akka.c9.clusterwithminroles.RunClusterNodeWithMin")

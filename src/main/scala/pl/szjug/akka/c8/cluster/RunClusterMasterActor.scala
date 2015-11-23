@@ -19,4 +19,3 @@ object RunClusterMasterActor extends App with LazyLogging with NetworkUtil {
 
   val actor = system.actorOf(Props(classOf[ClusterActorsMaster]), "master")
 }
-
