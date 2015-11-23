@@ -1,20 +1,20 @@
-package pl.szjug.akka.c12.clustersharding
+package pl.szjug.akka.c13.clustersharding
 
-
-import scala.util.Random
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{PoisonPill, ActorSystem, Props}
 import akka.cluster.sharding.ShardRegion.HashCodeMessageExtractor
-import akka.cluster.sharding.{ShardRegion, ClusterShardingSettings, ClusterSharding}
+import akka.cluster.sharding.{ClusterSharding, ClusterShardingSettings, ShardRegion}
 import akka.persistence.journal.leveldb.{SharedLeveldbJournal, SharedLeveldbStore}
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
-import pl.szjug.akka.Constants
-import pl.szjug.akka.Constants.{palette, imageSize}
+import pl.szjug.akka.Constants.{imageSize, palette}
 import pl.szjug.akka.actors.ActorRenderer
+import pl.szjug.akka.c12.clustersharding.ClusterShardingActorsMaster
 import pl.szjug.fractals.{Job, JobToDivide}
 
 
-object RunClusterShards extends App with LazyLogging {
+object RunClusterShardsWithCustomStrategy extends App with LazyLogging {
+
+  val ShardingTypeName = "rendering"
 
   def runActorSystem(port: Int) = {
     val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port=$port")
@@ -44,27 +44,35 @@ object RunClusterShards extends App with LazyLogging {
     }
   }
 
+  private val customAllocationStrategy = new CustomAllocationStrategy()
+
   ClusterSharding(system1).start(
-    typeName = Constants.ShardingTypeName,
+    typeName = ShardingTypeName,
     entityProps = Props(classOf[ActorRenderer]),
     settings = ClusterShardingSettings.create(system1),
-    messageExtractor = messageExtractor)
+    messageExtractor = messageExtractor,
+    allocationStrategy = customAllocationStrategy,
+    handOffStopMessage = PoisonPill)
   ClusterSharding(system2).start(
-    typeName = Constants.ShardingTypeName,
+    typeName = ShardingTypeName,
     entityProps = Props(classOf[ActorRenderer]),
     settings = ClusterShardingSettings.create(system2),
-    messageExtractor = messageExtractor)
+    messageExtractor = messageExtractor,
+    allocationStrategy = customAllocationStrategy,
+    handOffStopMessage = PoisonPill)
   ClusterSharding(system3).start(
-    typeName = Constants.ShardingTypeName,
+    typeName = ShardingTypeName,
     entityProps = Props(classOf[ActorRenderer]),
     settings = ClusterShardingSettings.create(system3),
-    messageExtractor = messageExtractor)
+    messageExtractor = messageExtractor,
+    allocationStrategy = customAllocationStrategy,
+    handOffStopMessage = PoisonPill)
 
   // Wait for cluster to be UP
   Thread.sleep(15000L)
   println("Sending messages")
 
-  val master = system2.actorOf(Props[ClusterShardingActorsMaster])
+  val master = system1.actorOf(Props[ClusterShardingActorsMaster])
 
   master ! JobToDivide(imageSize, 100, 20, palette)
 }

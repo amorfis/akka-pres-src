@@ -6,10 +6,7 @@ import pl.szjug.akka.Constants._
 
 class ClusterShardingActorsMaster extends PaintingResultsActor with JobHandling {
 
-  val Rows = 15
-  val Columns = 40
-
-  val sharded = ClusterSharding(context.system).shardRegion(RunClusterShards.ShardingTypeName)
+  val sharded = ClusterSharding(context.system).shardRegion(ShardingTypeName)
 
   val handleJobs = handleJob(Seq(sharded))
 
